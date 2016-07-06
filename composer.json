@@ -7,7 +7,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "maknz/slack-laravel": "^1.0"
+        "coderstephen/slack-client": "^0.2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -47,5 +47,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "minimum-stability": "dev"
 }
