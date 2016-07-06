@@ -156,6 +156,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Maknz\Slack\Laravel\ServiceProvider::class,
     ],
 
     /*
@@ -201,7 +202,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Slack' => Maknz\Slack\Laravel\Facade::class,
     ],
 
 ];
