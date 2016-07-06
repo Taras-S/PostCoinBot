@@ -1,5 +1,5 @@
-@extends('types.private')
+@extends('bot.responses.types.private')
 
-@section('text)
+@section('text')
     Your wallet {{ $wallet }} has been successfully set!
 @endsection

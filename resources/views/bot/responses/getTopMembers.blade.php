@@ -1,6 +1,6 @@
-@extends('types.public')
+@extends('bot.responses.types.public')
 
-@section('text)
+@section('text')
     @forelse ($members as $index => $member)
         {{ $index }}. {{ $member->to_name }} — {{ $member->amount }} coins
     @empty

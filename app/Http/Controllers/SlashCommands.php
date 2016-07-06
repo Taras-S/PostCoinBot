@@ -9,6 +9,7 @@ use App\Member;
 use App\Sending;
 use Mockery\Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class that handle slack slash commands
@@ -27,11 +28,11 @@ class SlashCommands extends Controller
     {
         $payload = explode(' ', $request->text);
         $command = $payload[0];
-        $data    = $payload[1];
+        isset($payload[1]) ? $data = $payload[1] : $data = NULL;
 
         switch ($command) {
             case 'setwallet':
-                return $this->setWallet($request->user_id, $data);
+                return $this->setWallet($request->user_id, $request->user_name, $data);
                 break;
             case 'stat':
                 return $this->getStats($request->user_id);
@@ -64,23 +65,26 @@ class SlashCommands extends Controller
     /**
      * Sets member wallet
      *
-     * @param Request $request
-     * @return string
+     * @param $slack_id
+     * @param $slack_name
+     * @param $wallet
+     * @return mixed
      */
-    public function setWallet($slack_id, $wallet)
+    public function setWallet($slack_id, $slack_name, $wallet)
     {
         $member = Member::firstOrNew(['slack_id' => $slack_id]);
+        $member->username   = $slack_name;
         $member->wallet = $wallet;
         $member->save();
 
-        return $this->response(__FUNCTION__, compact($wallet));
+        return $this->response(__FUNCTION__, compact('wallet'));
     }
 
     /**
      * Returns members last statistic
      *
-     * @param Request $request
-     * @return string
+     * @param $slack_id
+     * @return mixed
      */
     public function getStats($slack_id)
     {

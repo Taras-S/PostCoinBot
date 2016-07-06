@@ -1,5 +1,5 @@
-@extends('types.private')
+@extends('bot.responses.types.private')
 
-@section('text)
+@section('text')
     Help command output :P
 @endsection

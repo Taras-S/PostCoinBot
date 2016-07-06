@@ -14,7 +14,7 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->string('slack_id');
-            $table->string('name');
+            $table->string('username');
             $table->string('wallet');
             $table->timestamps();
         });

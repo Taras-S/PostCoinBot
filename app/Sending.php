@@ -11,7 +11,7 @@ class Sending extends Model
     *
     * @var string
     */
-    protected $table = 'sendings';
+    protected $table = 'sending';
 
     /**
      * The attributes that are mass assignable.
