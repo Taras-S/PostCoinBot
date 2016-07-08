@@ -109,7 +109,7 @@ class SlashCommands extends Controller
         $from = Carbon::now()->startOfWeek();
         $to =   Carbon::now();
 
-        return $this->response('getTopMembers', ['members' => $this->getTopMembers([$from, $to])]);
+        return $this->response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
     }
 
     /**
@@ -122,23 +122,7 @@ class SlashCommands extends Controller
         $from = Carbon::now()->startOfWeek()->subWeek();
         $to   = Carbon::now()->startOfWeek();
 
-        return $this->response('getTopMembers', ['members' => $this->getTopMembers([$from, $to])]);
-    }
-
-    /**
-     * Returns TOP 10 members for the $period
-     *
-     * @param array $period
-     * @return mixed
-     */
-    private function getTopMembers(array $period)
-    {
-        return Sending::select(['to_name', DB::raw('SUM(amount)')])
-                      ->whereBetween('created_at', $period)
-                      ->groupBy('to_name')
-                      ->orderBy(DB::raw('SUM(amount)'), 'DESC')
-                      ->limit(10)
-                      ->get();
+        return $this->response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
     }
 
     /**
