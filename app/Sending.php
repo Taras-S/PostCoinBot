@@ -18,7 +18,7 @@ class Sending extends Model
      *
      * @var array
      */
-    protected $fillable = array('to', 'from', 'where', 'amount', 'type', 'done');
+    protected $fillable = array('to_name', 'to_slack_id', 'from_slack_id', 'from_name', 'where', 'amount', 'type', 'done');
 
     /**
      * Returns recipients ordered by total amount
