@@ -37,4 +37,28 @@ class Sending extends Model
             ->get();
     }
 
+    /**
+     * Returns ids of nameless (null) senders
+     *
+     * @return mixed
+     */
+    static function getUnnamedSenders()
+    {
+        return Sending::select('from_slack_id')
+            ->whereNull('from_name')
+            ->get();
+    }
+
+    /**
+     * Returns ids of nameless (null) recipients
+     *
+     * @return mixed
+     */
+    static function getUnnamedRecipients()
+    {
+        return Sending::select('to_slack_id')
+            ->whereNull('from_name')
+            ->get();
+    }
+
 }

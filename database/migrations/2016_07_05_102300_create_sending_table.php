@@ -17,8 +17,8 @@ class CreateSendingTable extends Migration
             $table->integer('amount');
             $table->string('from_slack_id');
             $table->string('to_slack_id');
-            $table->string('from_name');
-            $table->string('to_name');
+            $table->string('from_name')->nullable()->default('NULL');
+            $table->string('to_name')->nullable()->default('NULL');
             $table->string('where');
             $table->string('text');
             $table->enum('type', ['text', 'reaction']);
