@@ -16,6 +16,18 @@ class SlackChatListener extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     /**
+     * React loop
+     *
+     * @var \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
+     */
+    protected $loop;
+
+    /**
+     * @var RealTimeClient
+     */
+    protected $client;
+
+    /**
      * Create a new job instance.
      *
      * @return void

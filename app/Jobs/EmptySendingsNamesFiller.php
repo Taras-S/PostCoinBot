@@ -6,7 +6,9 @@ use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use React\EventLoop\Factory;
 use App\Sending;
+use Slack\ApiClient;
 
 /**
  * Fills empty (null) names in sendings
@@ -31,6 +33,18 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
     protected $senders_ids;
 
     /**
+     * React loop
+     *
+     * @var \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
+     */
+    protected $loop;
+
+    /**
+     * @var ApiClient
+     */
+    protected $client;
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -39,6 +53,13 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
     {
         $this->recipients_ids = Sending::getUnnamedRecipients();
         $this->senders_ids = Sending::getUnnamedSenders();
+
+        $this->loop = Factory::create();
+
+        $this->client = new ApiClient($this->loop);
+        $this->client->setToken('YOUR-TOKEN-HERE');
+
+        $this->loop->run();
     }
 
     /**
@@ -48,21 +69,21 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $this->handleRecievers();
-        $this->handleSenders();
+        $this->fillRecievers();
+        $this->fillSenders();
 
     }
 
     /**
      * Handle nameless recipients
      */
-    public function handleRecievers()
+    public function fillRecievers()
     {
         foreach ($this->recipients_ids as $id) {
             // TODO: name to id via slack api call
             $name = true;
             $sending = Sending::firstOrFail(['to_id' => $id]);
-            $sending->to_name = $name;
+            $sending->to_name = $this->getNameByID($id);
             $sending->save();
 
             sleep(1); // Cant call Slack API faster than 1 per second
@@ -72,16 +93,27 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
     /**
      * Handle nameless senders
      */
-    public function handleSenders()
+    public function fillSenders()
     {
         foreach ($this->senders_ids as $id) {
-            // TODO: name to id via slack api call
-            $name = true;
             $sending = Sending::firstOrFail(['from_id' => $id]);
-            $sending->from_name = $name;
+            $sending->from_name = $this->getNameByID($id);
             $sending->save();
 
             sleep(1); // Cant call Slack API faster than 1 per second
         }
+    }
+
+    /**
+     * Returns user name by his Slack ID
+     *
+     * @param $slack_id
+     * @return  string
+     */
+    protected function getNameByID($slack_id)
+    {
+        return $this->client->getUserById($slack_id)->then(function (\Slack\User $user) {
+            return $user->getUsername();
+        });
     }
 }
