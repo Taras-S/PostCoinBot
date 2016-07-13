@@ -1,4 +1,4 @@
-@extends('bot.responses.types.public')
+@extends('bot.responses.commands.types.public')
 
 @section('text')
     @forelse ($members as $index => $member)

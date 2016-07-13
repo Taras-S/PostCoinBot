@@ -126,7 +126,7 @@ class SlashCommands extends Controller
     }
 
     /**
-     * Shortcut for using view's lik answer templates
+     * Shortcut for using view's like answer templates
      *
      * @param string $template Name of view
      * @param mixed $data Data that will passed into view
@@ -134,7 +134,6 @@ class SlashCommands extends Controller
      */
     private function response($template, $data)
     {
-        return Response::view('bot.responses.' . $template, $data)->header('Content-Type', 'application/json');
+        return Response::view('bot.responses.commands' . $template, $data)->header('Content-Type', 'application/json');
     }
-
 }

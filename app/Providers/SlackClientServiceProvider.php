@@ -25,7 +25,7 @@ class SlackClientServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('SlackApi', function ($app) {
+        $this->app->singleton('SlackAPI', function ($app) {
             return new APIClient('token'); // TODO: set current user token
         });
 

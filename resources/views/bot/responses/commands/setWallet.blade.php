@@ -1,4 +1,4 @@
-@extends('bot.responses.types.private')
+@extends('bot.responses.commands.types.private')
 
 @section('text')
     Your wallet {{ $wallet }} has been successfully set!

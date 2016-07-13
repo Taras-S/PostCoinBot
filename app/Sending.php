@@ -42,9 +42,9 @@ class Sending extends Model
      *
      * @return mixed
      */
-    static function getUnnamedSenders()
+    public function getUnnamedSenders()
     {
-        return Sending::select('from_slack_id')
+        return self::select('from_slack_id')
             ->whereNull('from_name')
             ->get();
     }
@@ -54,9 +54,9 @@ class Sending extends Model
      *
      * @return mixed
      */
-    static function getUnnamedRecipients()
+    public function getUnnamedRecipients()
     {
-        return Sending::select('to_slack_id')
+        return self::select('to_slack_id')
             ->whereNull('from_name')
             ->get();
     }

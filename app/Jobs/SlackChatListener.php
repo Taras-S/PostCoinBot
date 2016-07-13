@@ -16,30 +16,19 @@ class SlackChatListener extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     /**
-     * React loop
-     *
-     * @var \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
-     */
-    protected $loop;
-
-    /**
      * @var RealTimeClient
      */
-    protected $client;
+    protected $chat;
+
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(SlackChat $chat)
     {
-        $this->loop = Factory::create();
-
-        $this->client = new RealTimeClient($this->loop);
-        $this->client->setToken('YOUR-TOKEN-HERE');
-
-        $this->loop->run();
+        $this->chat = $chat->client;
     }
 
     /**
@@ -49,7 +38,7 @@ class SlackChatListener extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $this->client->on('reaction_added', [$this, 'reactionAdded']);
+        $this->chat->on('reaction_added', [$this, 'reactionAdded']);
     }
 
     /**

@@ -33,33 +33,21 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
     protected $senders_ids;
 
     /**
-     * React loop
-     *
-     * @var \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
-     */
-    protected $loop;
-
-    /**
      * @var ApiClient
      */
-    protected $client;
+    protected $slack;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(SlackAPI $slack)
     {
         $this->recipients_ids = Sending::getUnnamedRecipients();
         $this->senders_ids = Sending::getUnnamedSenders();
 
-        $this->loop = Factory::create();
-
-        $this->client = new ApiClient($this->loop);
-        $this->client->setToken('YOUR-TOKEN-HERE');
-
-        $this->loop->run();
+        $this->slack = $slack->client;
     }
 
     /**
@@ -70,6 +58,7 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
     public function handle()
     {
         $this->fillRecievers();
+        sleep(1);
         $this->fillSenders();
 
     }
@@ -85,8 +74,6 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
             $sending = Sending::firstOrFail(['to_id' => $id]);
             $sending->to_name = $this->getNameByID($id);
             $sending->save();
-
-            sleep(1); // Cant call Slack API faster than 1 per second
         }
     }
 
@@ -99,8 +86,6 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
             $sending = Sending::firstOrFail(['from_id' => $id]);
             $sending->from_name = $this->getNameByID($id);
             $sending->save();
-
-            sleep(1); // Cant call Slack API faster than 1 per second
         }
     }
 
@@ -112,7 +97,7 @@ class EmptySendingsNamesFiller extends Job implements ShouldQueue
      */
     protected function getNameByID($slack_id)
     {
-        return $this->client->getUserById($slack_id)->then(function (\Slack\User $user) {
+        return $this->slack->getUserById($slack_id)->then(function (\Slack\User $user) {
             return $user->getUsername();
         });
     }

@@ -1,4 +1,4 @@
-@extends('bot.responses.types.public')
+@extends('bot.responses.commands.types.public')
 
 @section('text')
     During last week you recieved {{ $last_week }} coins.
