@@ -19,6 +19,4 @@ class APIClient extends Client
         $this->client = new RealTimeClient($this->loop);
         $this->client->setToken($this->token);
     }
-
-    public function createMessage
 }

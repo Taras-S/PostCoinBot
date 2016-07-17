@@ -89,13 +89,8 @@ class SlashCommands extends Controller
      */
     public function getStats($slack_id)
     {
-        $this_week = Sending::where('to_slack_id', $slack_id)
-                            ->where('created_at', '>', Carbon::now()->startOfWeek())
-                            ->count();
-
-        $last_week = Sending::where('to_slack_id', $slack_id)
-                            ->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek())
-                            ->count();
+        $this_week = Sending::where('to_slack_id', $slack_id) >thisWeek()->count();
+        $last_week = Sending::where('to_slack_id', $slack_id)->lastWeek()->count();
 
         return BotCommand::response(__FUNCTION__, compact('this_week', 'last_week'));
     }

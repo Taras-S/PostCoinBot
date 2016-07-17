@@ -21,13 +21,35 @@ class Sending extends Model
     protected $fillable = array('to_name', 'to_slack_id', 'from_slack_id', 'from_name', 'where', 'amount', 'type', 'done');
 
     /**
+     * Sendings, that was created during this week
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeThisWeek($query)
+    {
+        return $query->where('created_at', '>', Carbon::now()->startOfWeek());
+    }
+
+    /**
+     * Sendings, that was created last this week
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeLastWeek($query)
+    {
+        return $query->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek());
+    }
+
+    /**
      * Returns recipients ordered by total amount
      *
      * @param array $period
      * @param $limit
      * @return mixed
      */
-    static function getTopRecipients(array $period, $limit)
+    public function getTopRecipients(array $period, $limit)
     {
         return self::select(['to_name', DB::raw('SUM(amount)')])
             ->whereBetween('created_at', $period)
