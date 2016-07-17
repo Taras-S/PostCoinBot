@@ -10,6 +10,7 @@ use App\Sending;
 use Mockery\Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use BotCommand;
 
 /**
  * Class that handle slack slash commands
@@ -59,7 +60,7 @@ class SlashCommands extends Controller
      */
     public function getAvailableCommands()
     {
-        return $this->response(__FUNCTION__, []);
+        return BotCommand::response(__FUNCTION__, []);
     }
 
     /**
@@ -77,7 +78,7 @@ class SlashCommands extends Controller
         $member->wallet = $wallet;
         $member->save();
 
-        return $this->response(__FUNCTION__, compact('wallet'));
+        return BotCommand::response(__FUNCTION__, compact('wallet'));
     }
 
     /**
@@ -96,7 +97,7 @@ class SlashCommands extends Controller
                             ->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek())
                             ->count();
 
-        return $this->response(__FUNCTION__, compact('this_week', 'last_week'));
+        return BotCommand::response(__FUNCTION__, compact('this_week', 'last_week'));
     }
 
    /**
@@ -109,7 +110,7 @@ class SlashCommands extends Controller
         $from = Carbon::now()->startOfWeek();
         $to =   Carbon::now();
 
-        return $this->response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
+        return BotCommand::response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
     }
 
     /**
@@ -122,18 +123,6 @@ class SlashCommands extends Controller
         $from = Carbon::now()->startOfWeek()->subWeek();
         $to   = Carbon::now()->startOfWeek();
 
-        return $this->response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
-    }
-
-    /**
-     * Shortcut for using view's like answer templates
-     *
-     * @param string $template Name of view
-     * @param mixed $data Data that will passed into view
-     * @return mixed View
-     */
-    private function response($template, $data)
-    {
-        return Response::view('bot.responses.commands' . $template, $data)->header('Content-Type', 'application/json');
+        return BotCommand::response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
     }
 }
