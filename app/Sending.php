@@ -41,46 +41,4 @@ class Sending extends Model
     {
         return $query->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek());
     }
-
-    /**
-     * Returns recipients ordered by total amount
-     *
-     * @param array $period
-     * @param $limit
-     * @return mixed
-     */
-    public function getTopRecipients(array $period, $limit)
-    {
-        return self::select(['to_name', DB::raw('SUM(amount)')])
-            ->whereBetween('created_at', $period)
-            ->groupBy('to_name')
-            ->orderBy(DB::raw('SUM(amount)'), 'DESC')
-            ->limit($limit)
-            ->get();
-    }
-
-    /**
-     * Returns ids of nameless (null) senders
-     *
-     * @return mixed
-     */
-    public function getUnnamedSenders()
-    {
-        return self::select('from_slack_id')
-            ->whereNull('from_name')
-            ->get();
-    }
-
-    /**
-     * Returns ids of nameless (null) recipients
-     *
-     * @return mixed
-     */
-    public function getUnnamedRecipients()
-    {
-        return self::select('to_slack_id')
-            ->whereNull('from_name')
-            ->get();
-    }
-
 }

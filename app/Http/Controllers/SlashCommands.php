@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\SendingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests;
@@ -19,6 +20,17 @@ use BotCommand;
  */
 class SlashCommands extends Controller
 {
+    /**
+     * @var SendingRepository
+     */
+    public $sendings;
+
+    public function __construct(SendingRepository $sendings)
+    {
+        parent::_construct();
+        $this->sendings = $sendings;
+    }
+
     /**
      * Determinate which command need to call and returns result
      *
@@ -87,10 +99,10 @@ class SlashCommands extends Controller
      * @param $slack_id
      * @return mixed
      */
-    public function getStats($slack_id)
+    public function getStats($slackId)
     {
-        $this_week = Sending::where('to_slack_id', $slack_id) >thisWeek()->count();
-        $last_week = Sending::where('to_slack_id', $slack_id)->lastWeek()->count();
+        $thisWeek = $this->sendings->getThisWeekStatForRecipient($slackId);
+        $last_week = $this->sendings->getLastWeekStatForRecipient($slackId);
 
         return BotCommand::response(__FUNCTION__, compact('this_week', 'last_week'));
     }
@@ -105,7 +117,9 @@ class SlashCommands extends Controller
         $from = Carbon::now()->startOfWeek();
         $to =   Carbon::now();
 
-        return BotCommand::response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
+        $top = $this->sendings->getTopRecipients([$from, $to], 10);
+
+        return BotCommand::response('getTopMembers', compact('top'));
     }
 
     /**
@@ -118,6 +132,8 @@ class SlashCommands extends Controller
         $from = Carbon::now()->startOfWeek()->subWeek();
         $to   = Carbon::now()->startOfWeek();
 
-        return BotCommand::response('getTopMembers', ['members' => Sending::getTopRecipients([$from, $to], 10)]);
+        $top = $this->sendings->getTopRecipients([$from, $to], 10);
+
+        return BotCommand::response('getTopMembers', compact('top'));
     }
 }
