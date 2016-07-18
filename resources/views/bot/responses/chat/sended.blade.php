@@ -1,1 +1,0 @@
-PostCoin was sended! ;3
