@@ -1,12 +1,12 @@
 <?php
 
-namespace App\SlackClients;
+namespace App\Bot;
 
 use Slack\ApiClient;
 
 /**
  * Class RTMClient
- * @package App\SlackClients
+ * @package App\Bot
  */
 class RTMClient extends Client
 {

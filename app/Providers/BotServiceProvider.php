@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\SlackClients\APIClient;
-use App\SlackClients\RTMClient;
-use SlashCommandResponser;
+use App\Bot\APIClient;
+use App\Bot\RTMClient;
+use App\Bot\SlashCommandResponser;
 
-class SlackClientServiceProvider extends ServiceProvider
+class BotServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.

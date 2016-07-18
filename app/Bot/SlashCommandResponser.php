@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Bot;
+
 use Illuminate\Support\Facades\Response;
 
 /**
@@ -19,6 +21,6 @@ class SlashCommandResponser
      */
     public function response($response, $payload)
     {
-        return Response::view($this->responsePath . $response, $payload)->header('Content-Type', 'application/json');
+        return Response::view($this->responsePath . $response, $payload)->header('Content-Type', $this->responseType);
     }
 }

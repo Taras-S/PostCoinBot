@@ -156,7 +156,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Providers\SlackClientServiceProvider::class
+        App\Providers\BotServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class
+
     ],
 
     /*

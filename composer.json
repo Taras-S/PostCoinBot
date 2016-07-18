@@ -7,7 +7,8 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "coderstephen/slack-client": "^0.2.4"
+        "coderstephen/slack-client": "^0.2.4",
+        "prettus/l5-repository": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
