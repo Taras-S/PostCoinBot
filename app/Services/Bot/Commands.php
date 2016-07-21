@@ -5,11 +5,13 @@ namespace App\Services\Bot;
 use App\Repositories\SendingRepository;
 use App\Http\Requests\SlackCommandRequest;
 use Illuminate\Support\Facades\Response;
-use App\Member;
-use App\Sending;
+use App\Entities\Member;
+use App\Entities\Sending;
 use Mockery\Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+
+// TODO: Remove all messanger-specific things to request interface
 
 /**
  * Class that store slash commands
@@ -26,9 +28,10 @@ class Commands
      *
      * @param SendingRepository $sendings
      */
-    public function __construct(SendingRepository $sendings)
+    public function __construct(SendingRepository $sendings, SlackCommandRequest $request)
     {
         $this->sendings = $sendings;
+        $this->request  = $request;
     }
 
     /**
@@ -50,14 +53,14 @@ class Commands
      * @param $wallet
      * @return mixed
      */
-    public function setWallet($slack_id, $slack_name, $wallet)
+    public function setWallet()
     {
-        $member = Member::firstOrNew(['slack_id' => $slack_id]);
-        $member->username   = $slack_name;
-        $member->wallet = $wallet;
+        $member = Member::firstOrNew(['slack_id' => $this->request->user_id]);
+        $member->username = $this->request->user_name;
+        $member->wallet = $this->request->getInput();
         $member->save();
 
-        return compact('wallet');
+        return ['wallet' => $member->wallet];
     }
 
     /**
@@ -66,10 +69,10 @@ class Commands
      * @param $slack_id
      * @return mixed
      */
-    public function getStats($slackId)
+    public function getStats()
     {
-        $thisWeek = $this->sendings->getThisWeekStatForRecipient($slackId);
-        $last_week = $this->sendings->getLastWeekStatForRecipient($slackId);
+        $this_week = $this->sendings->getThisWeekStatForRecipient($this->request->user_id);
+        $last_week = $this->sendings->getLastWeekStatForRecipient($this->request->user_id);
 
         return compact('this_week', 'last_week');
     }

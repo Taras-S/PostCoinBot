@@ -157,7 +157,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\BotServiceProvider::class,
-        Prettus\Repository\Providers\RepositoryServiceProvider::class
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class
 
     ],
 

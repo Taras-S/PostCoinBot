@@ -5,7 +5,7 @@ namespace App\Repositories;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\SendingRepository;
-use App\Sending;
+use App\Entities\Sending;
 use App\Validators\SendingValidator;
 
 /**

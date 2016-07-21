@@ -22,8 +22,8 @@ class SlackCommandController extends Controller
      *
      * @var array
      */
-    private $route = [
-        'setWallet'      => 'setWallet',
+    private $routes = [
+        'setwallet'      => 'setWallet',
         'stat'           => 'getStats',
         'thisweek'       => 'getThisWeekTop',
         'lastweek'       => 'getLastWeekTop',
@@ -50,10 +50,33 @@ class SlackCommandController extends Controller
      */
     public function call(SlackCommandRequest $request, Commands $bot)
     {
-        $command = $this->route[$request->getCommand()];
-        $result  = app()->call([$bot, $command], [$request->getInput()]);
+        $method = $this->getMethodByCommand($request->getCommand());
+        $result  = app()->call([$bot, $method], [$request->getInput()]);
 
-        return $this->response($command, $result);
+        return $this->response($method, $result);
+    }
+
+    /**
+     * Returns bot class method name by command name that it handle
+     *
+     * @param $command
+     * @return string Method name
+     */
+    private function getMethodByCommand($command)
+    {
+        if (!$this->isCommandExists($command)) $command = '';
+        return $this->routes[$command];
+    }
+
+    /**
+     * True if command name exists
+     *
+     * @param $command
+     * @return bool
+     */
+    private function isCommandExists($command)
+    {
+        return array_key_exists($command, $this->routes);
     }
 
     /**
@@ -65,7 +88,7 @@ class SlackCommandController extends Controller
      */
     private function response($command, $payload)
     {
-        return Response::view($this->responsePath . $command, $payload)
+        return Response::view($this->responsePath . '.' . $command, $payload)
                        ->header('Content-Type', $this->responseType);
     }
 }

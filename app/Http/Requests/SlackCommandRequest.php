@@ -17,23 +17,21 @@ class SlackCommandRequest extends Request
     private $input;
 
     /**
-     * @return static
+     * @var array Exploded slack request string
      */
-    static function capture()
-    {
-        $instance = parent::capture();
-        $instance->parseCommand();
-        return $instance;
-    }
+    private $exploded;
 
     /**
      * Parse slack command data
      */
-    public function parseCommand()
+    public function parseRequest()
     {
-        $payload = explode(' ', $this->input('text'));
-        $this->command = $payload[0];
-        $this->input   = $payload[1];
+        if (isset($this->exploded)) return;
+
+        $this->exploded = explode(' ', $this->input('text'));
+
+        $this->command = strtolower($this->exploded[0]);
+        $this->input   = $this->exploded[1];
     }
 
     /**
@@ -43,6 +41,8 @@ class SlackCommandRequest extends Request
      */
     public function getCommand()
     {
+        if (empty($this->command)) $this->parseRequest();
+
         return $this->command;
     }
 
@@ -53,6 +53,8 @@ class SlackCommandRequest extends Request
      */
     public function getInput()
     {
+        if (empty($this->input)) $this->parseRequest();
+
         return $this->input;
     }
 
