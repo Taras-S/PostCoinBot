@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Bot;
+namespace App\Services\SlackClients;
 
 use React\EventLoop\Factory;
 
 /**
  * Class Client
+ *
  * @package App\Bot
  */
 abstract class Client

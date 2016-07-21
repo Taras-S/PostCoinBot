@@ -1,67 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Bot;
 
 use App\Repositories\SendingRepository;
-use Illuminate\Http\Request;
+use App\Http\Requests\SlackCommandRequest;
 use Illuminate\Support\Facades\Response;
-use App\Http\Requests;
 use App\Member;
 use App\Sending;
 use Mockery\Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use BotCommand;
 
 /**
- * Class that handle slack slash commands
- *
- * @package App\Http\Controllers
+ * Class that store slash commands
  */
-class SlashCommands extends Controller
+class Commands
 {
     /**
      * @var SendingRepository
      */
-    public $sendings;
-
-    public function __construct(SendingRepository $sendings)
-    {
-        parent::_construct();
-        $this->sendings = $sendings;
-    }
+    private $sendings;
 
     /**
-     * Determinate which command need to call and returns result
+     * SlashCommands constructor.
      *
-     * @param Request $request
-     * @return string
+     * @param SendingRepository $sendings
      */
-    public function process(Request $request)
+    public function __construct(SendingRepository $sendings)
     {
-        $payload = explode(' ', $request->text);
-        $command = $payload[0];
-        isset($payload[1]) ? $data = $payload[1] : $data = NULL;
-
-        switch ($command) {
-            case 'setwallet':
-                return $this->setWallet($request->user_id, $request->user_name, $data);
-                break;
-            case 'stat':
-                return $this->getStats($request->user_id);
-                break;
-            case 'thisweek':
-                return $this->getThisWeekTop();
-                break;
-            case 'lastweek':
-                return $this->getLastWeekTop();
-                break;
-            default:
-                // no break
-            case 'help':
-                return $this->getAvailableCommands();
-                break;
-        }
+        $this->sendings = $sendings;
     }
 
     /**
@@ -72,7 +39,7 @@ class SlashCommands extends Controller
      */
     public function getAvailableCommands()
     {
-        return BotCommand::response(__FUNCTION__, []);
+        return [];
     }
 
     /**
@@ -90,7 +57,7 @@ class SlashCommands extends Controller
         $member->wallet = $wallet;
         $member->save();
 
-        return BotCommand::response(__FUNCTION__, compact('wallet'));
+        return compact('wallet');
     }
 
     /**
@@ -104,10 +71,10 @@ class SlashCommands extends Controller
         $thisWeek = $this->sendings->getThisWeekStatForRecipient($slackId);
         $last_week = $this->sendings->getLastWeekStatForRecipient($slackId);
 
-        return BotCommand::response(__FUNCTION__, compact('this_week', 'last_week'));
+        return compact('this_week', 'last_week');
     }
 
-   /**
+    /**
      * Returns TOP 10 members for the current week
      *
      * @return mixed
@@ -119,7 +86,7 @@ class SlashCommands extends Controller
 
         $top = $this->sendings->getTopRecipients([$from, $to], 10);
 
-        return BotCommand::response('getTopMembers', compact('top'));
+        return compact('top');
     }
 
     /**
@@ -134,6 +101,6 @@ class SlashCommands extends Controller
 
         $top = $this->sendings->getTopRecipients([$from, $to], 10);
 
-        return BotCommand::response('getTopMembers', compact('top'));
+        return compact('top');
     }
 }

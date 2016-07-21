@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Bot;
+namespace App\Services\SlackClients;
 
 use Slack\RealTimeClient;
 
 /**
 * Class APIClient
+ *
 * @package App\Bot
 */
 class APIClient extends Client

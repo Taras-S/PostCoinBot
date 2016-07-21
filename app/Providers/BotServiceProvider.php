@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Bot\Commands;
 use Illuminate\Support\ServiceProvider;
-use App\Bot\APIClient;
-use App\Bot\RTMClient;
-use App\Bot\SlashCommandResponser;
 
 class BotServiceProvider extends ServiceProvider
 {
@@ -26,16 +24,8 @@ class BotServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('SlackAPI', function ($app) {
-            return new APIClient('token'); // TODO: set current user token
-        });
-
-        $this->app->singleton('SlackChat', function ($app) {
-            return new RTMClient('token'); // TODO: set current user token
-        });
-
-        $this->app->bind('BotCommand', function ($app) {
-            return new SlashCommandResponser();
+        $this->app->singleton('BotCommands', function ($app) {
+            return new Commands;
         });
     }
 }

@@ -18,13 +18,8 @@ Route::get('/', function () {
 /**
  * Slack slash commands
  */
-Route::post('/api/command/process',   'SlashCommands@process');
+Route::post('/api/slack/command/call',   'SlackCommandController@call');
 
-Route::post('/api/command/wallet',   'SlashCommands@setWallet');
-Route::post('/api/command/stats',    'SlashCommands@getStats');
-Route::post('/api/command/thisweek', 'SlashCommands@getThisWeekTop');
-Route::post('/api/command/lastweek', 'SlashCommands@getLastWeekTop');
-Route::post('/api/command/help',     'SlashCommands@getAvailableCommands');
 
 
 
