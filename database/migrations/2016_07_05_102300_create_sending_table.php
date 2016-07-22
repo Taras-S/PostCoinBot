@@ -12,10 +12,10 @@ class CreateSendingTable extends Migration
      */
     public function up()
     {
-        Schema::create('sending', function (Blueprint $table) {
+        Schema::create('sendings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('to_id');
-            $table->string('from_id');
+            $table->string('recipient_id');
+            $table->string('sender_id');
             $table->string('amount')->default(1);
             $table->boolean('done')->default(false);
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateSendingTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sending');
+        Schema::drop('sendings');
     }
 }

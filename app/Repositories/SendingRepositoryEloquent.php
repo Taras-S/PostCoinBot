@@ -41,7 +41,7 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      */
     public function getThisWeekStatForRecipient($id)
     {
-        return Sending::where('to_id', $recipientSlackId)->thisWeek()->count();
+        return Sending::where('recipient_id', $recipientSlackId)->thisWeek()->count();
     }
 
     /**
@@ -64,9 +64,9 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      */
     public function getTopRecipients(array $period, $limit)
     {
-        return Sending::select(['to_id', DB::raw('SUM(amount)')])
+        return Sending::select(['recipient_id', DB::raw('SUM(amount)')])
             ->whereBetween('created_at', $period)
-            ->groupBy('to_id')
+            ->groupBy('recipient_id')
             ->orderBy(DB::raw('SUM(amount)'), 'DESC')
             ->limit($limit)
             ->get();

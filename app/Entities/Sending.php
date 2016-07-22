@@ -3,22 +3,36 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Sending extends Model
 {
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'sending';
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = array('to_messenger_id', 'from_messenger_id', 'done');
+    protected $fillable = array('recipient_id', 'sender_id', 'done');
+
+    /**
+     * Get the sender model
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function sender()
+    {
+        return $this->belongsTo(Member::class);
+    }
+
+    /**
+     * Get the recipient model
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function recipient()
+    {
+        return $this->belongsTo(Member::class);
+    }
 
     /**
      * Sendings, that was created during this week

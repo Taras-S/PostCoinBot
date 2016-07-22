@@ -14,4 +14,14 @@ class Member extends Model
     protected $fillable = [
         'messenger_id', 'username', 'wallet'
     ];
+
+    public function received()
+    {
+        return $this->hasMany(Sending::class, 'recipient_id');
+    }
+
+    public function sended()
+    {
+        return $this->hasMany(Sending::class, 'sender_id');
+    }
 }

@@ -34,18 +34,4 @@ interface SendingRepository extends RepositoryInterface
      * @return mixed
      */
     public function getTopRecipients(array $period, $limit);
-
-    /**
-     * Returns ids of nameless (null) senders
-     *
-     * @return mixed
-     */
-    public function getUnnamedSenders();
-
-    /**
-     * Returns ids of nameless (null) recipients
-     *
-     * @return mixed
-     */
-    public function getUnnamedRecipients();
 }
