@@ -39,9 +39,9 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      * @param $recipientSlackId
      * @return mixed
      */
-    public function getThisWeekStatForRecipient($recipientSlackId)
+    public function getThisWeekStatForRecipient($id)
     {
-        return Sending::where('to_slack_id', $recipientSlackId)->thisWeek()->count();
+        return Sending::where('to_id', $recipientSlackId)->thisWeek()->count();
     }
 
     /**
@@ -50,9 +50,9 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      * @param $recipientSlackId
      * @return mixed
      */
-    public function getLastWeekStatForRecipient($recipientSlackId)
+    public function getLastWeekStatForRecipient($id)
     {
-        return Sending::where('to_slack_id', $recipientSlackId)->lastWeek()->count();
+        return Sending::where('to_messenger_id', $recipientSlackId)->lastWeek()->count();
     }
 
     /**
@@ -64,35 +64,11 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      */
     public function getTopRecipients(array $period, $limit)
     {
-        return Sending::select(['to_name', DB::raw('SUM(amount)')])
+        return Sending::select(['to_id', DB::raw('SUM(amount)')])
             ->whereBetween('created_at', $period)
-            ->groupBy('to_name')
+            ->groupBy('to_id')
             ->orderBy(DB::raw('SUM(amount)'), 'DESC')
             ->limit($limit)
-            ->get();
-    }
-
-    /**
-     * Returns ids of nameless (null) senders
-     *
-     * @return mixed
-     */
-    public function getUnnamedSenders()
-    {
-        return self::select('from_slack_id')
-            ->whereNull('from_name')
-            ->get();
-    }
-
-    /**
-     * Returns ids of nameless (null) recipients
-     *
-     * @return mixed
-     */
-    public function getUnnamedRecipients()
-    {
-        return self::select('to_slack_id')
-            ->whereNull('from_name')
             ->get();
     }
 }

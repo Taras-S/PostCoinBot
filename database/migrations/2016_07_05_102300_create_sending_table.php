@@ -14,15 +14,10 @@ class CreateSendingTable extends Migration
     {
         Schema::create('sending', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('amount');
-            $table->string('from_slack_id');
-            $table->string('to_slack_id');
-            $table->string('from_name')->nullable()->default('NULL');
-            $table->string('to_name')->nullable()->default('NULL');
-            $table->string('where');
-            $table->string('text');
-            $table->enum('type', ['text', 'reaction']);
-            $table->boolean('done');
+            $table->string('to_id');
+            $table->string('from_id');
+            $table->string('amount')->default(1);
+            $table->boolean('done')->default(false);
             $table->timestamps();
         });
     }

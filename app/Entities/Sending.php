@@ -18,7 +18,7 @@ class Sending extends Model
      *
      * @var array
      */
-    protected $fillable = array('to_name', 'to_slack_id', 'from_slack_id', 'from_name', 'where', 'amount', 'type', 'done');
+    protected $fillable = array('to_messenger_id', 'from_messenger_id', 'done');
 
     /**
      * Sendings, that was created during this week

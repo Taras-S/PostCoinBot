@@ -1,17 +1,19 @@
 <?php
 
+namespace App\Facades;
+
 use Illuminate\Support\Facades\Facade;
 
 /**
  * Class BotCommand
  */
-class BotCommand extends Facade
+class BotHelper extends Facade
 {
     /**
      * @return string
      */
     protected static function getFacadeAccessor()
     {
-        return 'BotCommand';
+        return 'BotHelper';
     }
 }

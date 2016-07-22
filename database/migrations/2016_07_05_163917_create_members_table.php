@@ -13,7 +13,7 @@ class CreateMembersTable extends Migration
     public function up()
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->string('slack_id');
+            $table->string('messenger_id');
             $table->string('username');
             $table->string('wallet');
             $table->timestamps();

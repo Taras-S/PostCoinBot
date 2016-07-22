@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\Bot\Commands;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Bot\Helper;
 
 class BotServiceProvider extends ServiceProvider
 {
@@ -24,8 +25,8 @@ class BotServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('BotCommands', function ($app) {
-            return new Commands;
+        $this->app->singleton('BotHelper', function () {
+            return new Helper;
         });
     }
 }

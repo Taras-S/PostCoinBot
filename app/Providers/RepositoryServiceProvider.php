@@ -27,6 +27,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(SendingRepository::class, SendingRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\KekRepository::class, \App\Repositories\KekRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\MemberRepository::class, \App\Repositories\MemberRepositoryEloquent::class);
         //:end-bindings:
     }
 }

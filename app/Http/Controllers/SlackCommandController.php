@@ -2,36 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\SendingRepository;
-use Illuminate\Http\Request;
+use App\Http\Requests\Request;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\SlackCommandRequest;
 use App\Services\Bot\Commands;
+use App\Http\Requests\SlackCommandRequest;
 
 /**
  * Class that handle slack slash commands
  *
  * @package App\Http\Controllers
  */
-class SlackCommandController extends Controller
+class SlackCommandController extends CommandController
 {
-    /**
-     * Command name to bot method name relations table
-     *
-     * @var array
-     */
-    private $routes = [
-        'setwallet'      => 'setWallet',
-        'stat'           => 'getStats',
-        'thisweek'       => 'getThisWeekTop',
-        'lastweek'       => 'getLastWeekTop',
-        'help'           => 'getAvailableCommands',
-
-        '' /* Default */ => 'getAvailableCommands'
-    ];
-
     /**
      * @var string Path to directory where responses stored
      */
@@ -45,38 +28,17 @@ class SlackCommandController extends Controller
     /**
      * Determinate which command need to call and returns result
      *
-     * @param Request $request
-     * @return string
+     * @param SlackCommandRequest $request
+     * @param Commands $bot
+     * @return mixed
      */
     public function call(SlackCommandRequest $request, Commands $bot)
     {
-        $method = $this->getMethodByCommand($request->getCommand());
-        $result  = app()->call([$bot, $method], [$request->getInput()]);
+        $method = $this->getMethodByCommand($request->command()->name);
+        $member = app()->call([$request, 'member']);
+        $result = app()->call([$bot, $method], [$request->command()->input, $member]);
 
         return $this->response($method, $result);
-    }
-
-    /**
-     * Returns bot class method name by command name that it handle
-     *
-     * @param $command
-     * @return string Method name
-     */
-    private function getMethodByCommand($command)
-    {
-        if (!$this->isCommandExists($command)) $command = '';
-        return $this->routes[$command];
-    }
-
-    /**
-     * True if command name exists
-     *
-     * @param $command
-     * @return bool
-     */
-    private function isCommandExists($command)
-    {
-        return array_key_exists($command, $this->routes);
     }
 
     /**

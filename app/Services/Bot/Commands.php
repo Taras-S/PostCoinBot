@@ -24,14 +24,16 @@ class Commands
     private $sendings;
 
     /**
-     * SlashCommands constructor.
-     *
+     * Commands constructor.
+     * @param string $input Command input
+     * @param Member $member Member that executes the command
      * @param SendingRepository $sendings
      */
-    public function __construct(SendingRepository $sendings, SlackCommandRequest $request)
+    public function __construct($input = '', Member $member, SendingRepository $sendings)
     {
         $this->sendings = $sendings;
-        $this->request  = $request;
+        $this->input  = $input;
+        $this->member = $member;
     }
 
     /**
@@ -55,12 +57,10 @@ class Commands
      */
     public function setWallet()
     {
-        $member = Member::firstOrNew(['slack_id' => $this->request->user_id]);
-        $member->username = $this->request->user_name;
-        $member->wallet = $this->request->getInput();
-        $member->save();
+        $this->member->wallet = $this->input;
+        $this->member->save();
 
-        return ['wallet' => $member->wallet];
+        return ['wallet' => $this->member->wallet];
     }
 
     /**
@@ -71,8 +71,8 @@ class Commands
      */
     public function getStats()
     {
-        $this_week = $this->sendings->getThisWeekStatForRecipient($this->request->user_id);
-        $last_week = $this->sendings->getLastWeekStatForRecipient($this->request->user_id);
+        $this_week = $this->sendings->getThisWeekStatForRecipient($this->member->id);
+        $last_week = $this->sendings->getLastWeekStatForRecipient($this->member->id);
 
         return compact('this_week', 'last_week');
     }

@@ -8,5 +8,4 @@ return [
      * Default amount of sending
      */
     'amount' => 1
-
 ];

@@ -2,9 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Entities\Member;
+use App\Facades\BotHelper;
 use App\Http\Requests\Request;
+use App\Http\Requests\CommandRequestInterface;
+use App\Repositories\MemberRepository;
+use App\Repositories\MemberRepositoryEloquent;
 
-class SlackCommandRequest extends Request
+class SlackCommandRequest extends Request implements CommandRequestInterface
 {
     /**
      * @var string Current command name
@@ -22,40 +27,27 @@ class SlackCommandRequest extends Request
     private $exploded;
 
     /**
-     * Parse slack command data
-     */
-    public function parseRequest()
-    {
-        if (isset($this->exploded)) return;
-
-        $this->exploded = explode(' ', $this->input('text'));
-
-        $this->command = strtolower($this->exploded[0]);
-        $this->input   = $this->exploded[1];
-    }
-
-    /**
      * Returns current command
      *
      * @return string
      */
-    public function getCommand()
+    public function command()
     {
         if (empty($this->command)) $this->parseRequest();
-
         return $this->command;
     }
 
     /**
-     * Returns command data
+     * Returns current member
      *
-     * @return string
+     * @return Member
      */
-    public function getInput()
+    public function member(MemberRepository $member)
     {
-        if (empty($this->input)) $this->parseRequest();
+        $messengerId = BotHelper::memberId('slack', $this->input('user_id'));
+        $messengerName = $this->input('user_name');
 
-        return $this->input;
+        return $member->getFromMessenger($messengerId, $messengerName);
     }
 
     /**
@@ -78,6 +70,19 @@ class SlackCommandRequest extends Request
         return [
             //
         ];
+    }
+
+    /**
+     * Parse slack command data
+     */
+    private function parseRequest()
+    {
+        if (isset($this->exploded)) return;
+        $this->exploded = explode(' ', $this->input('text'));
+
+        $this->command = new \stdClass;
+        $this->command->name  = strtolower($this->exploded[0]);
+        $this->command->input = $this->exploded[1];
     }
 
 }

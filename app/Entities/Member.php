@@ -12,6 +12,6 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'slack_id', 'username', 'wallet'
+        'messenger_id', 'username', 'wallet'
     ];
 }
