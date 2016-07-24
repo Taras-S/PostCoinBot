@@ -17,11 +17,6 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
     private $command;
 
     /**
-     * @var string Current command input
-     */
-    private $input;
-
-    /**
      * @var array Exploded slack request string
      */
     private $exploded;
@@ -57,7 +52,7 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
      */
     public function authorize()
     {
-        return true; // TODO: check if request is from slack
+        return $this->input('token') == config('bot.slack.slashCommandsToken');
     }
 
     /**
@@ -82,7 +77,7 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
 
         $this->command = new \stdClass;
         $this->command->name  = strtolower($this->exploded[0]);
-        $this->command->input = $this->exploded[1];
+        $this->command->payload = $this->exploded[1];
     }
 
 }

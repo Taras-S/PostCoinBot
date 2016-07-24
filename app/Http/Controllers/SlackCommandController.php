@@ -36,7 +36,7 @@ class SlackCommandController extends CommandController
     {
         $method = $this->getMethodByCommand($request->command()->name);
         $member = app()->call([$request, 'member']);
-        $result = app()->call([$bot, $method], [$request->command()->input, $member]);
+        $result = app()->call([$bot, $method], [$request->command()->payload, $member]);
 
         return $this->response($method, $result);
     }

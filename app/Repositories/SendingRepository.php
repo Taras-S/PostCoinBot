@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Prettus\Repository\Contracts\RepositoryInterface;
+use App\Entities\Member;
 
 /**
  * Interface SendingRepository
@@ -13,18 +14,18 @@ interface SendingRepository extends RepositoryInterface
     /**
      * Returns current week statistics by recipient Slack ID
      *
-     * @param $recipientSlackId
+     * @param Member $member
      * @return mixed
      */
-    public function getThisWeekStatForRecipient($recipientSlackId);
+    public function getThisWeekStatForRecipient(Member $member);
 
     /**
      * Returns previous week statistics by recipient Slack ID
      *
-     * @param $recipientSlackId
+     * @param Member $member
      * @return mixed
      */
-    public function getLastWeekStatForRecipient($recipientSlackId);
+    public function getLastWeekStatForRecipient(Member $member);
 
     /**
      * Returns TOP recipients for period

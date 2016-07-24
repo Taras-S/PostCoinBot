@@ -40,7 +40,7 @@ class Sending extends Model
      * @param $query
      * @return mixed
      */
-    public function scopeThisWeek($query)
+    public function scopeOnThisWeek($query)
     {
         return $query->where('created_at', '>', Carbon::now()->startOfWeek());
     }
@@ -51,7 +51,7 @@ class Sending extends Model
      * @param $query
      * @return mixed
      */
-    public function scopeLastWeek($query)
+    public function scopeOnLastWeek($query)
     {
         return $query->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek());
     }

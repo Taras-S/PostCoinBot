@@ -18,7 +18,7 @@ Route::get('/', function () {
 /**
  * Slack slash commands
  */
-Route::post('/api/slack/command/call',   'SlackCommandController@call');
+Route::post('/api/slack/command/call', 'SlackCommandController@call');
 
 
 

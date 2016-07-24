@@ -15,12 +15,12 @@ class Member extends Model
         'messenger_id', 'username', 'wallet'
     ];
 
-    public function received()
+    public function receivedSendings()
     {
         return $this->hasMany(Sending::class, 'recipient_id');
     }
 
-    public function sended()
+    public function sendedSendings()
     {
         return $this->hasMany(Sending::class, 'sender_id');
     }

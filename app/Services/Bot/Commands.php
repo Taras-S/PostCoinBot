@@ -71,8 +71,8 @@ class Commands
      */
     public function getStats()
     {
-        $this_week = $this->sendings->getThisWeekStatForRecipient($this->member->id);
-        $last_week = $this->sendings->getLastWeekStatForRecipient($this->member->id);
+        $this_week = $this->sendings->getThisWeekStatForRecipient($this->member);
+        $last_week = $this->sendings->getLastWeekStatForRecipient($this->member);
 
         return compact('this_week', 'last_week');
     }

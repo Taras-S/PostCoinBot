@@ -6,7 +6,9 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\SendingRepository;
 use App\Entities\Sending;
+use App\Entities\Member;
 use App\Validators\SendingValidator;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class SendingRepositoryEloquent
@@ -39,9 +41,9 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      * @param $recipientSlackId
      * @return mixed
      */
-    public function getThisWeekStatForRecipient($id)
+    public function getThisWeekStatForRecipient(Member $member)
     {
-        return Sending::where('recipient_id', $recipientSlackId)->thisWeek()->count();
+        return $member->receivedSendings()->onThisWeek()->count();
     }
 
     /**
@@ -50,9 +52,9 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      * @param $recipientSlackId
      * @return mixed
      */
-    public function getLastWeekStatForRecipient($id)
+    public function getLastWeekStatForRecipient(Member $member)
     {
-        return Sending::where('to_messenger_id', $recipientSlackId)->lastWeek()->count();
+        return $member->receivedSendings()->onLastWeek()->count();
     }
 
     /**
