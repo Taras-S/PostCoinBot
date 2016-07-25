@@ -15,12 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/**
- * Slack slash commands
- */
-Route::post('/api/slack/command/call', 'SlackCommandController@call');
-
-
-
-
 
