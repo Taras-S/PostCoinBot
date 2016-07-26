@@ -106,4 +106,13 @@ class Commands
 
         return compact('top');
     }
+
+
+    /**
+     * Makes new sending
+     */
+    public function send()
+    {
+        // TODO: allow to send via commands
+    }
 }
