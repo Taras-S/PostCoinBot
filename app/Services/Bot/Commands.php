@@ -11,8 +11,6 @@ use Mockery\Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-// TODO: Remove all messanger-specific things to request interface
-
 /**
  * Class that store slash commands
  */
