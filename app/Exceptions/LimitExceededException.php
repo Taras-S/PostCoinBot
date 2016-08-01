@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-class TeamLimitExceededException extends SendingException
+class LimitExceededException extends SendingException
 {
-    protected $view = 'teamLimitExceededError';
+    protected $view = 'limitExceededError';
 }
