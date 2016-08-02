@@ -30,7 +30,7 @@ class Commands
     public function __construct($input = '', Member $member, SendingRepository $sendings)
     {
         $this->sendings = $sendings;
-        $this->input  = $input;
+        $this->input = $input;
         $this->member = $member;
     }
 
