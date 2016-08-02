@@ -16,6 +16,15 @@ use App\Validators\MemberValidator;
 class MemberRepositoryEloquent extends BaseRepository implements MemberRepository
 {
     /**
+     * Messenger name to messenger DB prefix map
+     *
+     * @var array
+     */
+    protected $messengerPrefixes = [
+        'slack' => 'slack_'
+    ];
+
+    /**
      * Specify Model class name
      *
      * @return string
@@ -34,18 +43,28 @@ class MemberRepositoryEloquent extends BaseRepository implements MemberRepositor
     }
 
     /**
-     * Returns current member model
+     * Return members without name
+     *
+     * @return mixed
+     */
+    public function getWithoutName()
+    {
+        return Member::withoutName()-get();
+    }
+
+    /**
+     * Returns current member model by messenger ID. If model not found, new model will be created.
      *
      * @param string $messengerId Messenger ID with messenger name prefix
      * @param string $messengerName Username in messenger
      * @return Member
      */
-    public function getFromMessenger($messengerId, $messengerName)
+    public function getFromMessenger($messenger, $id, array $update = [])
     {
-        $member = Member::firstOrNew(['messenger_id' => $messengerId]);
-        if ($member->username != $messengerName) $member->username = $messengerName;
-        $member->save();
+        $member = Member::firstOrNew(['messenger_id' => $id, 'messenger_name' => $messenger]);
+        $member->update(array_filter($update));
 
+        $member->save();
         return $member;
     }
 }

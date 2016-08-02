@@ -10,5 +10,6 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface MemberRepository extends RepositoryInterface
 {
-   public function getFromMessenger($messengerId, $messengerName);
+   public function getFromMessenger($messenger, $id, array $name = []);
+   public function getWithoutName();
 }

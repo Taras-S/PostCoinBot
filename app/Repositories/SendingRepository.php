@@ -35,4 +35,12 @@ interface SendingRepository extends RepositoryInterface
      * @return mixed
      */
     public function getTopRecipients(array $period, $limit);
+
+    /**
+     * Create new sending if valid
+     *
+     * @param Member $sender
+     * @param Member $recipient
+     */
+    public function add(Member $sender, Member $recipient);
 }
