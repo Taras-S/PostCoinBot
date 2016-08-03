@@ -33,16 +33,16 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
     }
 
     /**
-     * Returns current member
+     * Returns member that run the command
      *
-     * @return Member
+     * @param MemberRepository $member
+     * @return mixed
      */
     public function member(MemberRepository $member)
     {
-        $messengerId = BotHelper::memberId('slack', $this->input('user_id'));
-        $messengerName = $this->input('user_name');
-
-        return $member->getFromMessenger($messengerId, $messengerName);
+        return $member->getFromMessenger('slack', $this->input('user_id'),
+            ['name' => $this->input('user_name')]
+        );
     }
 
     /**
