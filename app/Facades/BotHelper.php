@@ -5,7 +5,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * Class BotCommand
+ * Class BotHelper
  */
 class BotHelper extends Facade
 {
