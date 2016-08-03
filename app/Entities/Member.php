@@ -12,16 +12,37 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'messenger_id', 'username', 'wallet'
+        'messenger_id', 'name', 'wallet'
     ];
 
+    /**
+     * Sendings that member received
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function receivedSendings()
     {
         return $this->hasMany(Sending::class, 'recipient_id');
     }
 
+    /**
+     * Sendings that member sended
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function sendedSendings()
     {
         return $this->hasMany(Sending::class, 'sender_id');
+    }
+
+    /**
+     * Members with undefined names
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWithoutName($query)
+    {
+        return $query->where('name', 'NULL');
     }
 }

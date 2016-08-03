@@ -55,4 +55,15 @@ class Sending extends Model
     {
         return $query->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek());
     }
+
+    /**
+     * Sendings, that was created today
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeToday($query)
+    {
+        return $query->where('created_at', '>', Carbon::now()->startOfDay());
+    }
 }
