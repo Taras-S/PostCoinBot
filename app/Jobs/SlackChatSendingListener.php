@@ -12,8 +12,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
 use App\Services\SlackClients\APIClient;
 use App\Services\SlackClients\RTMClient;
-use Slack\RealTimeClient;
+use Slack\User;
 use PDOException;
+use function React\Promise\all;
 
 class SlackChatListener extends Job implements ShouldQueue
 {
@@ -34,8 +35,8 @@ class SlackChatListener extends Job implements ShouldQueue
      */
     protected $api;
 
-   /**
-     * @var RealTimeClient
+    /**
+     * @var RTMClient
      */
     protected $chat;
 
@@ -49,8 +50,8 @@ class SlackChatListener extends Job implements ShouldQueue
      */
     public function __construct(RTMClient $chat, APIClient $api, MemberRepository $member, SendingRepository $sending)
     {
-        $this->chat = $chat->client;
-        $this->api = $api->client;
+        $this->chat = $chat;
+        $this->api = $api;
         $this->member = $member;
         $this->sending = $sending;
     }
@@ -72,22 +73,29 @@ class SlackChatListener extends Job implements ShouldQueue
     protected function reactionAdded(array $data)
     {
         if (!$this->reactionIsCorrect($data['reaction'])) return;
-        $this->openDBConnectionIfLost();
+        $this->checkDBconnection();
 
-        $sender = $this->member->getFromMessenger('slack', $data['user']);
-        $recipient = $this->member->getFromMessenger('slack', $data['item_user']);
+        $sender = $this->api->getUserById($data['user']);
+        $recipient = $this->api->getUserById($data['user']);
 
-        try {
-            $this->sending->add($sender, $recipient);
-        } catch (SendingException $error) {
-            $this->respondToUser($data['item_user'], $error->getMessage());
-        }
+        all([$sender, $recipient])->then(function ($users) use ($this) {
+
+            $sender = $this->member->getFromMessenger('slack', $users[0]->getId(), ['name' => $users[0]->getUsername()]);
+            $recipient = $this->member->getFromMessenger('slack', $users[1]->getId(), ['name' => $users[1]->getUsername()]);
+
+            try {
+                $this->sending->add($sender, $recipient);
+                $this->respondToUser($recipient->messenger_id, 'YouReceivedSending');
+            } catch (SendingException $error) {
+                $this->respondToUser($recipient->messenger_id, $error->getMessage());
+            }
+        });
     }
 
     /**
      * Send response to user
      *
-     * @param string $slackId User ID
+     * @param string $slackId User ID that we want to notify
      * @param View $view
      */
     protected function respondToUser($slackId, $text)
@@ -112,7 +120,7 @@ class SlackChatListener extends Job implements ShouldQueue
     /**
      * Reconnects to DB, if connection is lost (useful and daemons)
      */
-    protected function openDBConnectionIfLost()
+    protected function checkDBconnection()
     {
         try {
             DB::connection()->getDatabaseName();
