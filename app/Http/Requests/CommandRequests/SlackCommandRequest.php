@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\CommandRequests;
 
 use App\Entities\Member;
 use App\Facades\BotHelper;
 use App\Http\Requests\Request;
-use App\Http\Requests\CommandRequestInterface;
+use App\Http\Requests\CommandRequests\Interfaces\CommandRequestInterface;
 use App\Repositories\MemberRepository;
 use App\Repositories\MemberRepositoryEloquent;
 

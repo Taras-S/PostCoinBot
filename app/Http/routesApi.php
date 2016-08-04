@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Commands\SlackCommandController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
