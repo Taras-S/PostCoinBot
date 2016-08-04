@@ -6,6 +6,9 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use App\Entities\User;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Response;
 
 class AuthController extends Controller
 {
@@ -38,6 +41,29 @@ class AuthController extends Controller
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
+
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @return Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('slack')->scopes([])->redirect();
+    }
+
+    /**
+     * Obtain the user information from GitHub.
+     *
+     * @return Response
+     */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('slack')->user();
+
+        // $user->token;
+    }
+
 
     /**
      * Get a validator for an incoming registration request.
