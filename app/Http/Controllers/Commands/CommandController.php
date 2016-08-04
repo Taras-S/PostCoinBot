@@ -22,6 +22,7 @@ abstract class CommandController extends Controller
      * @var Collection
      */
     protected $routes = [
+    //  '/command'  => 'MethodName'
         'setwallet' => 'setWallet',
         'stat'      => 'getStats',
         'thisweek'  => 'getThisWeekTop',
