@@ -158,7 +158,8 @@ return [
 
         App\Providers\BotServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
-        App\Providers\RepositoryServiceProvider::class
+        App\Providers\RepositoryServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
 
     ],
 
@@ -206,6 +207,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'BotHelper' => App\Facades\BotHelper::class
+        'BotHelper' => App\Facades\BotHelper::class,
+        'Socialize' => Laravel\Socialite\Facades\Socialite::class
     ],
 ];
