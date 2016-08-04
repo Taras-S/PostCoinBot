@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Commands;
+namespace App\Http\Controllers\Bot\Commands;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

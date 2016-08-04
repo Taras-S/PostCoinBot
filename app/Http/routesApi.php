@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Commands\SlackCommandController;
+use App\Http\Controllers\Bot\Commands\SlackCommandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +14,9 @@ use App\Http\Controllers\Commands\SlackCommandController;
 /**
  * Slack slash commands
  */
-Route::post('/api/slack/command/call', 'SlackCommandController@call');
+Route::post('/api/slack/command/call', 'Commands\SlackCommandController@call');
+
+/**
+ * Slack Events
+ */
+Route::post('/api/slack/event/fire', 'Events\SlackEventController@fire');

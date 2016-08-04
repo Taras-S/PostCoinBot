@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Commands;
+namespace App\Http\Controllers\Bot\Commands;
 
 use App\Http\Requests\Request;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests;
 use App\Services\Bot\Commands;
-use App\Http\Requests\CommandRequests\SlackCommandRequest;
+use App\Http\Requests\Bot\CommandRequests\SlackCommandRequest;
 
 /**
  * Class that handle slack slash commands
