@@ -68,7 +68,7 @@ class SlackSendingReactionEventListener extends Controller
             $this->respondToMember($recipient->messenger_id, $error->getMessage());
         }
 
-        return Response('Sending handled', 200);
+        return Response('Sending handled');
     }
 
     /**

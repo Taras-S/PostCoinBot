@@ -32,6 +32,11 @@ return [
         /**
          * Your slash commands token to ensure that requests is valid
          */
-        'slashCommandsToken' => env('SLACK_SLASH_COMMANDS_TOKEN')
+        'slashCommandsToken' => env('SLACK_SLASH_COMMANDS_TOKEN'),
+
+        /**
+         * Your Events API token to ensure that requests is valid
+         */
+        'eventsApiToken' => env('SLACK_EVENTS_API_TOKEN')
     ]
 ];
