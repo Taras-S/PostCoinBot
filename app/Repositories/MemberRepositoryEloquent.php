@@ -67,4 +67,5 @@ class MemberRepositoryEloquent extends BaseRepository implements MemberRepositor
         $member->save();
         return $member;
     }
+
 }
