@@ -5,7 +5,7 @@ namespace App\Http\Requests\Bot\CommandRequests;
 use App\Entities\Member;
 use App\Facades\BotHelper;
 use App\Http\Requests\Request;
-use App\Http\Requests\CommandRequests\Bot\Interfaces\CommandRequestInterface;
+use App\Http\Requests\Bot\CommandRequests\Interfaces\CommandRequestInterface;
 use App\Repositories\MemberRepository;
 use App\Repositories\MemberRepositoryEloquent;
 

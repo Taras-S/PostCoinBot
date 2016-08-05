@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Bot\Commands\SlackCommandController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -11,13 +9,15 @@ use App\Http\Controllers\Bot\Commands\SlackCommandController;
 |
 */
 
-/**
- * Slack slash commands
- */
-Route::post('/api/slack/command/call', 'Bot\Commands\SlackCommandController@call');
+Route::group(['namespace' => 'Bot'], function() {
 
-/**
- * Slack Events
- */
-Route::post('/api/slack/event/fire', 'Bot\SlackSendingReactionEventListener@fire')
-    ->middleware('CheckSendingReactionEvent');
+    /**
+     * Slack slash commands
+     */
+    Route::post('/api/slack/command/call', 'Commands\SlackCommandController@call');
+
+    /**
+     * Slack Events
+     */
+    Route::post('/api/slack/event/fire', 'SlackSendingReactionEventListener@fire')->middleware('sendingReaction');
+});

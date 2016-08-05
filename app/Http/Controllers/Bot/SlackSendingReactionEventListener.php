@@ -14,7 +14,7 @@ use App\Exceptions\SendingException;
  *
  * @package App\Http\Controllers\Bot
  */
-class SlackReactionSendingEventListener extends Controller
+class SlackSendingReactionEventListener extends Controller
 {
     /**
      * @var MemberRepository
@@ -45,10 +45,6 @@ class SlackReactionSendingEventListener extends Controller
      */
     public function fire(Request $request)
     {
-        if ($request->input('type') == 'url_verification') {
-            return Response($request->input('challenge'));
-        }
-
         return $this->addSending($request->input('event.user'), $request->input('event.item_user'));
     }
 
@@ -72,7 +68,7 @@ class SlackReactionSendingEventListener extends Controller
             $this->respondToMember($recipient->messenger_id, $error->getMessage());
         }
 
-        return Response('', 200);
+        return Response('Sending handled', 200);
     }
 
     /**

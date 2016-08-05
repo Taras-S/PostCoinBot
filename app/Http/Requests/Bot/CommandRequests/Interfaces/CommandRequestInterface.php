@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\CommandRequests\Bot\Interfaces;
+namespace App\Http\Requests\Bot\CommandRequests\Interfaces;
 
 use App\Entities\Member;
 use App\Repositories\MemberRepository;
