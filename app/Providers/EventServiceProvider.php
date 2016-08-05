@@ -16,7 +16,6 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ReactionAdded' => [
             'App\Listeners\ReactionAddedListener',
         ],
-        'SocialiteProviders\Manager\SocialiteWasCalled'
     ];
 
     /**
