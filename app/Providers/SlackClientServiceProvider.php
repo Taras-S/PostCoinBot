@@ -3,8 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\SlackClients\APIClient;
-use App\Services\SlackClients\RTMClient;
+use Frlnc\Slack\Http\SlackResponseFactory;
+use Frlnc\Slack\Http\CurlInteractor;
+use Frlnc\Slack\Core\Commander;
 
 class SlackClientServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,12 @@ class SlackClientServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('SlackAPI', function ($app) {
+            $interactor = new CurlInteractor;
+            $interactor->setResponseFactory(new SlackResponseFactory);
+            $commander = new Commander('xoxp-some-token-for-slack', $interactor);
+
+            return $commander;
+        });
     }
 }

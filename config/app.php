@@ -159,8 +159,8 @@ return [
         App\Providers\BotServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
+        App\Providers\SlackClientServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
-
     ],
 
     /*

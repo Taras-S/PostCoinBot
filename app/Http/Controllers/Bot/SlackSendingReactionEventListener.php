@@ -27,14 +27,20 @@ class SlackSendingReactionEventListener extends Controller
     protected $sending;
 
     /**
+     * @var \Frlnc\Slack\Core\Commander;
+     */
+    protected $api;
+
+    /**
      * SlackReactionSendingEventListener constructor.
      *
      * @param MemberRepository $member
      */
-    public function __construct(MemberRepository $member, SendingRepository $sending)
+    public function __construct(MemberRepository $member, SendingRepository $sending, SlackAPI $api)
     {
         $this->member = $member;
         $this->sending = $sending;
+        $this->api = $api;
     }
 
     /**
@@ -74,11 +80,14 @@ class SlackSendingReactionEventListener extends Controller
     /**
      *
      * Send response to member
-     * @param string $member User ID that we want to notify
+     * @param string $member Slack user ID that we want to notify
      * @param string $text
      */
     protected function respondToMember($member, $text)
     {
-        // TODO: use sync sdk or directly API to send response
+        return $this->api->execute('chat.postMessage', [
+            'channel' => $member,
+            'text'    => $text
+        ]);
     }
 }

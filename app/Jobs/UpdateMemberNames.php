@@ -62,6 +62,14 @@ class UpdateMemberNames extends Job implements ShouldQueue
      */
     protected function getNameByID($slackId)
     {
-        // TODO
+        $response = $this->api->execute('users.info', [
+            'user' => $slackId
+        ]);
+
+        if ($response['ok']) {
+            return $response['usern']['name'];
+        } else {
+            throw new \Exception('Slack users.info dont OK');
+        }
     }
 }
