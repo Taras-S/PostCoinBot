@@ -37,10 +37,32 @@ class SlackReactionSendingEventListener extends Controller
         $this->sending = $sending;
     }
 
+    /**
+     * Handle URL verification or execute logic based on event
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function fire(Request $request)
     {
-        $sender = $this->member->getFromMessenger('slack', $request->input('event.user'));
-        $recipient = $this->member->getFromMessenger('slack', $request->input('event.item_user'));
+        if ($request->input('type') == 'url_verification') {
+            return Response($request->input('challenge'));
+        }
+
+        return $this->addSending($request->input('event.user'), $request->input('event.item_user'));
+    }
+
+    /**
+     * Add sending and response about success/fail to members
+     *
+     * @param $senderId
+     * @param $recipientId
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    protected function addSending($senderId, $recipientId)
+    {
+        $sender = $this->member->getFromMessenger('slack', $senderId));
+        $recipient = $this->member->getFromMessenger('slack', $recipientId);
         $this->dispatch(new UpdateMemberNames([$sender, $recipient]))->delay(5);
 
         try {
@@ -50,12 +72,12 @@ class SlackReactionSendingEventListener extends Controller
             $this->respondToMember($recipient->messenger_id, $error->getMessage());
         }
 
-        return response('', 200);
+        return Response('', 200);
     }
 
     /**
-     * Send response to member
      *
+     * Send response to member
      * @param string $member User ID that we want to notify
      * @param string $text
      */
