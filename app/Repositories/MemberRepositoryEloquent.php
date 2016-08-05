@@ -61,7 +61,7 @@ class MemberRepositoryEloquent extends BaseRepository implements MemberRepositor
      */
     public function getFromMessenger($messenger, $id, array $update = [])
     {
-        $member = Member::firstOrNew(['messenger_id' => $id, 'messenger_name' => $messenger]);
+        $member = Member::firstOrCreate(['messenger_id' => $id, 'messenger' => $messenger]);
         $member->update(array_filter($update));
 
         $member->save();

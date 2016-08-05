@@ -49,7 +49,7 @@ class UpdateMemberNames extends Job implements ShouldQueue
     public function handle()
     {
         foreach($this->members as $member) {
-            $member->name = $this->getNameByID($member->messenger_id);
+            $member->messenger_name = $this->getNameByID($member->messenger_id);
             $member->save();
         }
     }

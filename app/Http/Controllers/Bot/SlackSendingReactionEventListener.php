@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Bot;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Request;
+use Illuminate\Http\Request;
 use App\Jobs\UpdateMemberNames;
 use App\Repositories\MemberRepository;
 use App\Repositories\SendingRepository;
@@ -59,7 +59,7 @@ class SlackSendingReactionEventListener extends Controller
     {
         $sender = $this->member->getFromMessenger('slack', $senderId);
         $recipient = $this->member->getFromMessenger('slack', $recipientId);
-        $this->dispatch(new UpdateMemberNames([$sender, $recipient]))->delay(5);
+        $this->dispatch((new UpdateMemberNames([$sender, $recipient]))->delay(5));
 
         try {
             $this->sending->add($sender, $recipient);

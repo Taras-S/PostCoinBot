@@ -7,7 +7,7 @@ use Exception;
 
 class SendingException extends Exception
 {
-    /**
+    /**s
      * View to render error message
      *
      * @var string
@@ -20,7 +20,7 @@ class SendingException extends Exception
      * @param int $code
      * @param Exception $previous
      */
-    public function __construct($message = null, $code, Exception $previous)
+    public function __construct($message = null, $code = 0, Exception $previous = null)
     {
         if (empty($message)) $message = $this->getview();
         parent::__construct($message, $code, $previous);

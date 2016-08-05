@@ -32,11 +32,13 @@ class SlackCommandController extends CommandController
      * @param Commands $bot
      * @return mixed
      */
-    public function call(SlackCommandRequest $request, Commands $bot)
+    public function call(SlackCommandRequest $request)
     {
         $method = $this->getMethodByCommand($request->command()->name);
         $member = app()->call([$request, 'member']);
-        $result = app()->call([$bot, $method], [$request->command()->payload, $member]);
+
+        $commands = app()->make(Commands::class, ['input' => $request->command()->payload, 'member' => $member]);
+        $result = $commands->$method();
 
         return $this->response($method, $result);
     }
