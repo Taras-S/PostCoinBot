@@ -61,7 +61,7 @@ class SlackReactionSendingEventListener extends Controller
      */
     protected function addSending($senderId, $recipientId)
     {
-        $sender = $this->member->getFromMessenger('slack', $senderId));
+        $sender = $this->member->getFromMessenger('slack', $senderId);
         $recipient = $this->member->getFromMessenger('slack', $recipientId);
         $this->dispatch(new UpdateMemberNames([$sender, $recipient]))->delay(5);
 
