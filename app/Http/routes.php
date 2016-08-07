@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('auth/slack', 'Auth\AuthController@redirectToProvider');
+Route::get('auth/slack', 'Auth\AuthController@redirectToProvider')->name('auth/slack');
 Route::get('auth/slack/callback', 'Auth\AuthController@handleProviderCallback');
 
+Route::auth();
+
+Route::get('/home', 'HomeController@index')->name('home');

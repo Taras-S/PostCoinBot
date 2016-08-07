@@ -208,6 +208,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'BotHelper' => App\Facades\BotHelper::class,
-        'Socialize' => Laravel\Socialite\Facades\Socialite::class
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class
     ],
 ];

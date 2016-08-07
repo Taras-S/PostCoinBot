@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use \SocialiteProviders\Manager\SocialiteWasCalled;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ReactionAdded' => [
             'App\Listeners\ReactionAddedListener',
         ],
+
+        SocialiteWasCalled::class => [
+            'SocialiteProviders\Slack\SlackExtendSocialite@handle',
+        ]
     ];
 
     /**

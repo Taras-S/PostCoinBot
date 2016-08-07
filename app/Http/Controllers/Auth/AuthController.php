@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -49,7 +51,7 @@ class AuthController extends Controller
      */
     public function redirectToProvider()
     {
-        return Socialite::driver('slack')->scopes([])->redirect();
+        return Socialite::with('slack')->scopes(['incoming-webhook', 'commands', 'bot'])->redirect();
     }
 
     /**
@@ -57,13 +59,15 @@ class AuthController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(UserRepository $users)
     {
-        $user = Socialite::driver('slack')->user();
+        Socialite::driver('slack')->user();
+       // $user = $users->getFromMessenger('slack', Socialite::driver('slack')->user());
+        //$body = $user->accessTokenResponseBody;
+        //Auth::login($user);
 
-        // $user->token;
+        return redirect()->to('/home');
     }
-
 
     /**
      * Get a validator for an incoming registration request.
