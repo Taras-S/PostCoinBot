@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Repositories\UserRepository;
+use App\Services\SlackButton\SlackButton;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -35,12 +36,19 @@ class AuthController extends Controller
     protected $redirectTo = '/';
 
     /**
+     * @var SlackButton
+     */
+    protected $provider;
+
+    /**
      * Create a new authentication controller instance.
      *
+     * @param SlackButton $provider
      * @return void
      */
-    public function __construct()
+    public function __construct(SlackButton $provider)
     {
+        $this->provider = $provider;
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
 
@@ -51,22 +59,21 @@ class AuthController extends Controller
      */
     public function redirectToProvider()
     {
-        return Socialite::with('slack')->scopes(['incoming-webhook', 'commands', 'bot'])->redirect();
+        return $this->provider->redirectWithScope(['incoming-webhook', 'commands', 'bot']);
     }
 
     /**
-     * Obtain the user information from GitHub.
+     * Obtain team information from Slack
      *
      * @return Response
      */
     public function handleProviderCallback(UserRepository $users)
     {
-        Socialite::driver('slack')->user();
-       // $user = $users->getFromMessenger('slack', Socialite::driver('slack')->user());
-        //$body = $user->accessTokenResponseBody;
-        //Auth::login($user);
+        $data = $this->provider->getAccessData();
+        $user = $users->getFromMessenger('slack', $data['team_id'], $data['access_token'], $data['bot']['bot_access_token']);
+        Auth::login($user, true);
 
-        return redirect()->to('/home');
+        return redirect()->route('dashboard');
     }
 
     /**

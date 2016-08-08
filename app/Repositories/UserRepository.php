@@ -11,5 +11,5 @@ use Laravel\Socialite\Contracts\User as MessengerUser;
  */
 interface UserRepository extends RepositoryInterface
 {
-    public function getFromMessenger($messenger, MessengerUser $userData);
+    public function getFromMessenger($messenger, $id, $accessToken, $botAccessToken);
 }

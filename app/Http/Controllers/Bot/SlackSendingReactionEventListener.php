@@ -8,6 +8,7 @@ use App\Jobs\UpdateMemberNames;
 use App\Repositories\MemberRepository;
 use App\Repositories\SendingRepository;
 use App\Exceptions\SendingException;
+use Frlnc\Slack\Core\Commander as SlackApi;
 
 /**
  * Listen reaction_added slack event to handle sendings via reactions
@@ -35,8 +36,9 @@ class SlackSendingReactionEventListener extends Controller
      * SlackReactionSendingEventListener constructor.
      *
      * @param MemberRepository $member
+     * @param SlackApi $api
      */
-    public function __construct(MemberRepository $member, SendingRepository $sending, SlackAPI $api)
+    public function __construct(MemberRepository $member, SendingRepository $sending, SlackApi $api)
     {
         $this->member = $member;
         $this->sending = $sending;
@@ -65,7 +67,7 @@ class SlackSendingReactionEventListener extends Controller
     {
         $sender = $this->member->getFromMessenger('slack', $senderId);
         $recipient = $this->member->getFromMessenger('slack', $recipientId);
-        $this->dispatch((new UpdateMemberNames([$sender, $recipient]))->delay(5));
+        $this->dispatch((new UpdateMemberNames([$sender, $recipient, $this->api]))->delay(5));
 
         try {
             $this->sending->add($sender, $recipient);

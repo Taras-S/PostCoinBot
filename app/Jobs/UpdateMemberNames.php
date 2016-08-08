@@ -3,11 +3,11 @@ namespace App\Jobs;
 use App\Jobs\Job;
 use App\Repositories\MemberRepository;
 use Carbon\Carbon;
+use Frlnc\Slack\Core\Commander as SlackApi;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use React\EventLoop\Factory;
-use App\Services\SlackClients\APIClient;
 use Slack\User;
 use App\Entities\Member;
 
@@ -33,12 +33,20 @@ class UpdateMemberNames extends Job implements ShouldQueue
      */
 
     /**
+     * Slack API instance
+     *
+     * @var SlackApi
+     */
+    protected $api;
+
+    /**
      * UpdateMemberNames constructor.
      *
      * @param Member $members
      */
-    public function __construct(array $members)
+    public function __construct(array $members, SlackApi $api)
     {
+        $this->api = $api;
         $this->members = $members;
     }
     /**

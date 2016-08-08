@@ -26,7 +26,7 @@ class SlackClientServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('SlackAPI', function ($app) {
+        $this->app->bind(Commander::class, function ($app) {
             $interactor = new CurlInteractor;
             $interactor->setResponseFactory(new SlackResponseFactory);
             $commander = new Commander('xoxp-some-token-for-slack', $interactor);

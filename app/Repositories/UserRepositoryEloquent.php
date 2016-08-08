@@ -35,18 +35,20 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Creates new user or returns existing
+     * Create a new user or returns existing
      *
-     * @param MessengerUser $user
-     * @param string $provider
+     * @param $messenger
+     * @param $id
+     * @param $accessToken
+     * @param $botAccessToken
      * @return mixed
      */
-    public function getFromMessenger($messenger, MessengerUser $userData)
+    public function getFromMessenger($messenger, $id, $accessToken, $botAccessToken)
     {
-        $user = User::firstOrCreate(['email' => $userData->getEmail()])->update(['name' => $userData->getName()]);
-        $user->socialAccounts()->updateOrCreate([
-            'messenger' => $messenger,
-            'messenger_user_id' => $userData->getId()
+        $user = User::firstOrCreate(['messenger' => $messenger, 'messenger_id' => $id]);
+        $user->update([
+            'access_token' => $accessToken,
+            'bot_access_token' => $botAccessToken
         ]);
 
         return $user;

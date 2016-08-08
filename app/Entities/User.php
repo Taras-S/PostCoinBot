@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'messenger', 'messenger_id', 'access_token', 'bot_access_token'
     ];
 
     /**
@@ -23,14 +23,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    /**
-     * Returns social accounts
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function socialAccounts()
-    {
-        return $this->hasMany(SocialAccount::class);
-    }
 }

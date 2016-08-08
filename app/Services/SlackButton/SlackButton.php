@@ -2,8 +2,9 @@
 
 namespace App\Services\SlackButton;
 
-use Frlnc\Slack\Core\Commander;
+use Frlnc\Slack\Core\Commander as SlackApi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 /**
  * Oauth implementation to auth via Slack Button
@@ -28,6 +29,11 @@ class SlackButton
     protected $secret;
 
     /**
+     * Oauth code
+     */
+    protected $code;
+
+    /**
      * @var Commander
      */
     protected $api;
@@ -39,16 +45,12 @@ class SlackButton
      * @param Request $request
      * @return boolean|\stdClass
      */
-    public function __construct(SlackAPI $api, Request $request)
+    public function __construct(SlackApi $api, Request $request)
     {
-        if (!$request->has('code')) return false;
-
         $this->api = $api;
-
-        $this->client = config('services.slack.client_id');
+        $this->code = $request->input('code');
+        $this->id = config('services.slack.client_id');
         $this->secret = config('services.slack.client_secret');
-
-        return (object) $this->getAccessData($request->code);
     }
 
     /**
@@ -58,12 +60,24 @@ class SlackButton
      * @param $code
      * @return \Frlnc\Slack\Contracts\Http\Response
      */
-    public function getAccessData($code)
+    public function getAccessData()
     {
-        return $this->api->execute('oauth.access', [
+         return $this->api->execute('oauth.access', [
             'client_id' => $this->id,
             'client_secret' => $this->secret,
-            'code' => $code,
-        ]);
+            'code' => $this->code
+        ])->getBody();
+    }
+
+    /**
+     * Redirects to Slack oauth
+     *
+     * @param array $scope
+     * @return Redirect
+     */
+    public function redirectWithScope(array $scope)
+    {
+        $scope = implode(',', $scope);
+        return Redirect('https://slack.com/oauth/authorize?scope='.$scope.'&client_id='.$this->id);
     }
 }
