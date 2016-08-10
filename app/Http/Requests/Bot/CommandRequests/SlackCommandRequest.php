@@ -52,7 +52,7 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
      */
     public function authorize()
     {
-        return true; //$this->input('token') == config('bot.slack.slashCommandsToken');
+        return $this->input('token') == config('bot.slack.slashCommandsToken');
     }
 
     /**

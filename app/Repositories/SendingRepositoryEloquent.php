@@ -73,8 +73,7 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      */
     public function getTopRecipients(array $period, $limit)
     {
-        return Sending::select(['recipient_id', DB::raw('SUM(amount)')])
-            ->whereBetween('created_at', $period)
+        return Sending::whereBetween('created_at', $period)
             ->groupBy('recipient_id')
             ->orderBy(DB::raw('SUM(amount)'), 'DESC')
             ->limit($limit)

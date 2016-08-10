@@ -59,7 +59,7 @@ class AuthController extends Controller
      */
     public function redirectToProvider()
     {
-        return $this->provider->redirectWithScope(['incoming-webhook', 'commands', 'bot']);
+        return $this->provider->redirectWithScope(['incoming-webhook', 'commands', 'bot', 'reactions:read']);
     }
 
     /**
@@ -71,8 +71,8 @@ class AuthController extends Controller
     {
         $data = $this->provider->getAccessData();
         $user = $users->getFromMessenger('slack', $data['team_id'], $data['access_token'], $data['bot']['bot_access_token']);
-        Auth::login($user, true);
 
+        Auth::login($user, true);
         return redirect()->route('dashboard');
     }
 

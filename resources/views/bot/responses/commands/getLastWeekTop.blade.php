@@ -1,0 +1,1 @@
+@include('bot.responses.commands.getTop')

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Entities\User;
+use App\Http\Requests\Request;
 use Illuminate\Support\ServiceProvider;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Frlnc\Slack\Http\CurlInteractor;
@@ -26,12 +28,11 @@ class SlackClientServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(Commander::class, function ($app) {
+        $this->app->bind(Commander::class, function ($app, Request $request) {
             $interactor = new CurlInteractor;
             $interactor->setResponseFactory(new SlackResponseFactory);
-            $commander = new Commander('xoxp-some-token-for-slack', $interactor);
-
-            return $commander;
+            $token = User::select('bot_access_token')->where('messenger_id', $request->input('team_id'));
+            return new Commander($token, $interactor);
         });
     }
 }
