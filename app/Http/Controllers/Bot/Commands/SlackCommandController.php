@@ -21,11 +21,6 @@ class SlackCommandController extends CommandController
     private $responsePath = 'bot.responses.commands';
 
     /**
-     * @var string Header that will be passed with result
-     */
-    private $responseType = 'application/json';
-
-    /**
      * Determinate which command need to call and returns result
      *
      * @param SlackCommandRequest $request
@@ -52,7 +47,21 @@ class SlackCommandController extends CommandController
      */
     private function response($command, $payload)
     {
-        return Response::view($this->responsePath . '.' . $command, $payload)
-                       ->header('Content-Type', $this->responseType);
+        $text = (string) view($this->responsePath . '.' . $command, $payload);
+        return $this->responseInChannel($text);
+    }
+
+    /**
+     * All users in channel see response
+     *
+     * @param $text
+     * @return mixed
+     */
+    private function responseInChannel($text)
+    {
+        return Response()->json([
+            'response_type' => 'in_channel',
+            'text' => $text
+        ]);
     }
 }

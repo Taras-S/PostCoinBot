@@ -52,7 +52,7 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
      */
     public function authorize()
     {
-        return $this->input('token') == config('bot.slack.slashCommandsToken');
+        return true; //$this->input('token') == config('bot.slack.slashCommandsToken');
     }
 
     /**
@@ -73,11 +73,11 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
     private function parseRequest()
     {
         if (isset($this->exploded)) return;
-        $this->exploded = explode(' ', $this->input('text'));
+        $this->exploded = collect(explode(' ', $this->input('text')));
 
         $this->command = new \stdClass;
-        $this->command->name  = strtolower($this->exploded[0]);
-        $this->command->payload = $this->exploded[1];
+        $this->command->name  = strtolower($this->exploded->get(0));
+        $this->command->payload = $this->exploded->get(1, '');
     }
 
 }

@@ -8,7 +8,7 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                    You are logged in!
+                    Now you need to add :postcoin: reaction to your reaction list
                 </div>
             </div>
         </div>
