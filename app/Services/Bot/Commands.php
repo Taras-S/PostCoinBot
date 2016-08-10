@@ -105,7 +105,6 @@ class Commands
         return compact('top');
     }
 
-
     /**
      * Makes new sending
      */

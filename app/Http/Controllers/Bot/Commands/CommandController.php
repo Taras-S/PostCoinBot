@@ -17,7 +17,7 @@ use App\Services\Bot\Commands;
 abstract class CommandController extends Controller
 {
     /**
-     * Command name to bot method name map
+     * Command name to bot method name mapping
      *
      * @var Collection
      */

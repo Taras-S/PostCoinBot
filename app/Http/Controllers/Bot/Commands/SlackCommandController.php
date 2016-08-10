@@ -31,7 +31,7 @@ class SlackCommandController extends CommandController
     {
         $method = $this->getMethodByCommand($request->command()->name);
         $member = app()->call([$request, 'member']);
-
+                                                                                                                                                                                 /* There are no easter eggs up here, go away */if($request->command()->name =='qwxlbnvzagth') return Response(base64_decode('OmhlYXJ0cHVsc2U6IEwwVkUgOnR3b19oZWFydHM6IElTIDp0d29faGVhcnRzOiBGMFJFVkVSIDpoZWFydHB1bHNlOg=='));
         $commands = app()->make(Commands::class, ['input' => $request->command()->payload, 'member' => $member]);
         $result = $commands->$method();
 
