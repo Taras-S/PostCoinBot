@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bot;
 
 use App\Http\Controllers\Controller;
+use \Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use App\Jobs\UpdateMemberNames;
 use App\Repositories\MemberRepository;
@@ -67,7 +68,8 @@ class SlackSendingReactionEventListener extends Controller
     {
         $sender = $this->member->getFromMessenger('slack', $senderId);
         $recipient = $this->member->getFromMessenger('slack', $recipientId);
-        $this->dispatch(with(new UpdateMemberNames([$sender, $recipient], $this->api))->delay(5));
+
+        $this->updateNames([$recipient, $sender]);
 
         try {
             $this->sending->add($sender, $recipient);
@@ -80,10 +82,11 @@ class SlackSendingReactionEventListener extends Controller
     }
 
     /**
-     *
      * Send response to member
+     *
      * @param string $member Slack user ID that we want to notify
      * @param string $text
+     * @return mixed
      */
     protected function respondToMember($member, $text)
     {
@@ -92,4 +95,16 @@ class SlackSendingReactionEventListener extends Controller
             'text'    => $text
         ]);
     }
+
+    /**
+     * Update member names
+     *
+     * @param array $members
+     */
+    protected function updateNames(array $members)
+    {
+        $job = (new UpdateMemberNames(collect($members), $this->api))->delay(5);
+        $this->dispatch($job);
+    }
+
 }

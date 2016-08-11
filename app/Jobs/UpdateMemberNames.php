@@ -1,25 +1,17 @@
 <?php
 namespace App\Jobs;
-use App\Jobs\Job;
-use App\Repositories\MemberRepository;
-use Carbon\Carbon;
+
+use App\Entities\Member;
 use Frlnc\Slack\Core\Commander as SlackApi;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use React\EventLoop\Factory;
-use Slack\User;
-use App\Entities\Member;
+use Illuminate\Support\Collection;
 
-/**
- * Slack Event API & RTM doesnt provide full information like name about users, so we need to query it via API.
- * Because of low rate limit we use queue to prevent slowdown of application
- *
- * @package App\Jobs
- */
-class UpdateMemberNames extends Job implements ShouldQueue
+class UpdateMemberNames implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * @var Member
@@ -44,7 +36,7 @@ class UpdateMemberNames extends Job implements ShouldQueue
      *
      * @param Member $members
      */
-    public function __construct(array $members, SlackApi $api)
+    public function __construct(Collection $members, SlackApi $api)
     {
         $this->api = $api;
         $this->members = $members;
@@ -65,8 +57,9 @@ class UpdateMemberNames extends Job implements ShouldQueue
     /**
      * Returns user name by his Slack ID
      *
-     * @param $slack_id
-     * @return string
+     * @param $slackId
+     * @return mixed
+     * @throws \Exception
      */
     protected function getNameByID($slackId)
     {
