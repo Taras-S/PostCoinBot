@@ -53,7 +53,7 @@ class Sending extends Model
      */
     public function scopeOnLastWeek($query)
     {
-        return $query->where('created_at', '>', Carbon::now()->startOfWeek()->subWeek());
+        return $query->whereBetween('created_at', [Carbon::now()->startOfWeek()->subWeek(), Carbon::now()->startOfWeek()]);
     }
 
     /**

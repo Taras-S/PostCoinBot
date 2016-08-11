@@ -50,6 +50,6 @@ class Helper
      */
     protected function getResponse($path, $template, $payload)
     {
-        return (string) view($this->basePath .'.' . $path . '.' . $template, $payload);
+        return (string) view($this->basePath . '.' . $path . '.' . $template, $payload);
     }
 }
