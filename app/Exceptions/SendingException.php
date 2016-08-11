@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Facades\BotHelper;
 use Illuminate\Support\Facades\Response;
 use Exception;
 
@@ -15,6 +16,13 @@ class SendingException extends Exception
     protected $view = 'sendingError';
 
     /**
+     * Notify about this error will be sended to recipient (true) or sender (false)?
+     *
+     * @var bool
+     */
+    protected $sendToRecipient = false;
+
+    /**
      * SendingException constructor.
      * @param null $message
      * @param int $code
@@ -22,17 +30,19 @@ class SendingException extends Exception
      */
     public function __construct($message = null, $code = 0, Exception $previous = null)
     {
-        if (empty($message)) $message = $this->getview();
+        if (empty($message)) $message = BotHelper::chatResponse($this->view);
         parent::__construct($message, $code, $previous);
     }
 
     /**
-     * Returns view to render sending error message
+     * Determinates, who should receive notification about error and returns his
      *
+     * @param $sender
+     * @param $recipient
      * @return mixed
      */
-    protected function getView()
+    public function sendToSenderOrRecipient($sender, $recipient)
     {
-        return Response::view('bot.response.chat.' . $this->view);
+        return $this->sendToRecipient ? $recipient : $sender;
     }
 }

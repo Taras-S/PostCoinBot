@@ -1,7 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: taras
- * Date: 11.08.16
- * Time: 17:43
- */
+
+namespace App\Exceptions;
+
+use Exception;
+
+class SlackApiException extends Exception {
+    //
+}
