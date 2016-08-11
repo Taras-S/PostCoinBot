@@ -98,6 +98,7 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
         $sending = new Sending();
         $sending->sender()->associate($sender);
         $sending->recipient()->associate($recipient);
+        $sending->save();
 
         Event::fire(new SendingAdded($sending));
 

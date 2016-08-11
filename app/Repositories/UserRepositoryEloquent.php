@@ -2,13 +2,11 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\UserRepository;
-use App\Entities\SocialAccount;
 use App\Entities\User;
 use App\Validators\UserValidator;
-use Laravel\Socialite\Contracts\User as MessengerUser;
 
 /**
  * Class UserRepositoryEloquent
@@ -52,5 +50,19 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         ]);
 
         return $user;
+    }
+
+    /**
+     * Returns token to make API requests
+     *
+     * @return string
+     */
+    public function getTokenByMessengerId($messengerId)
+    {
+        try {
+            return User::where('messenger_id', $messengerId)->firstOrFail()->bot_access_token;
+        } catch (ModelNotFoundException $e) {
+            return '';
+        }
     }
 }
