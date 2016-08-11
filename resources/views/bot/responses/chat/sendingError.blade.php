@@ -1,0 +1,1 @@
+Some error while sending postcoin, sorry :( Try again?

@@ -1,0 +1,1 @@
+You can`t send postcoin to yourself (:

@@ -1,0 +1,1 @@
+Sorry, you can`t send more postcoin today, your personal limit is exceeded :(
