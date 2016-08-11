@@ -1,7 +1,1 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: taras
- * Date: 11.08.16
- * Time: 21:22
- */
+Looks like you received a one more postcoin! Congrats! :-)

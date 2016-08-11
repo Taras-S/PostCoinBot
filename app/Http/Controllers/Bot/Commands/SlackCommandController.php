@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Bot\Commands;
 
+use App\Facades\BotHelper;
 use App\Http\Requests\Request;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests;
@@ -47,7 +48,7 @@ class SlackCommandController extends CommandController
      */
     private function response($command, $payload)
     {
-        $text = (string) view($this->responsePath . '.' . $command, $payload);
+        $text = BotHelper::commandResponse($command, $payload);
         return $this->responseInChannel($text);
     }
 

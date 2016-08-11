@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Bot;
 
+use App\Facades\BotHelper;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Repositories\MemberRepository;
 use App\Repositories\SendingRepository;
 use App\Exceptions\SendingException;
 use Frlnc\Slack\Core\Commander as SlackApi;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Listen reaction_added slack event to handle sendings via reactions
@@ -73,9 +75,10 @@ class SlackSendingReactionEventListener extends Controller
 
         try {
             $this->sending->add($sender, $recipient);
-            $this->respondToMember($recipient->messenger_id, 'YouReceivedSending');
+            $this->respondToMember($recipient->messenger_id, BotHelper::chatResponse('youReceivedSending'));
         } catch (SendingException $error) {
-            $this->respondToMember($recipient->messenger_id, $error->getMessage());
+            $sendTo = $error->sendToSenderOrRecipient($sender, $recipient);
+            $this->respondToMember($sendTo->messenger_id, $error->getMessage());
         }
 
         return Response('Sending handled');
@@ -103,7 +106,8 @@ class SlackSendingReactionEventListener extends Controller
      */
     protected function updateNames(array $members)
     {
-        $job = (new UpdateMemberNames(collect($members), $this->api))->delay(5);
+        $job = (new UpdateMemberNames($this->api, ...$members))->delay(5);
+        Log::info('dispatch');
         $this->dispatch($job);
     }
 

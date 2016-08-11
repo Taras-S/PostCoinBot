@@ -8,6 +8,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use App\Exceptions\SlackApiException;
+use Illuminate\Support\Facades\Log;
 
 class UpdateMemberNames implements ShouldQueue
 {
@@ -36,7 +38,7 @@ class UpdateMemberNames implements ShouldQueue
      *
      * @param Member $members
      */
-    public function __construct(Collection $members, SlackApi $api)
+    public function __construct(SlackApi $api, Member ...$members)
     {
         $this->api = $api;
         $this->members = $members;
@@ -44,10 +46,12 @@ class UpdateMemberNames implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param SlackApi $api
      * @return void
      */
     public function handle()
     {
+        Log::info('handle');
         foreach($this->members as $member) {
             $member->messenger_name = $this->getNameByID($member->messenger_id);
             $member->save();
@@ -58,6 +62,7 @@ class UpdateMemberNames implements ShouldQueue
      * Returns user name by his Slack ID
      *
      * @param $slackId
+     * @param SlackApi
      * @return mixed
      * @throws \Exception
      */
@@ -65,12 +70,12 @@ class UpdateMemberNames implements ShouldQueue
     {
         $response = $this->api->execute('users.info', [
             'user' => $slackId
-        ]);
+        ])->getBody();
 
         if ($response['ok']) {
-            return $response['usern']['name'];
+            return $response['user']['name'];
         } else {
-            throw new \Exception('Slack users.info dont OK');
+            throw new SlackApiException('Slack users.info method returned error: ' . $response['error']);
         }
     }
 }

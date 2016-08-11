@@ -1,8 +1,1 @@
-<?php
-
-namespace App\Exceptions;
-
-class WalletNotSetException extends SendingException
-{
-    protected $view = 'walletNotSetError';
-}
+Looks like you don`t set your PostCoin wallet. Set it with command /postcoin setWallet [YOUR_WALLET]
