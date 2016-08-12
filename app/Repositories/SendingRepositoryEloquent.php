@@ -81,7 +81,7 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
             ->where('messenger_team_id', $team)
             ->whereBetween('sendings.created_at', $period)
             ->groupBy('recipient_id')
-            ->orderBy(DB::raw('total'), 'DESC')
+            ->orderBy('total', 'DESC')
             ->limit($limit)
             ->get();
     }
