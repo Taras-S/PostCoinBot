@@ -32,9 +32,10 @@ interface SendingRepository extends RepositoryInterface
      *
      * @param array $period
      * @param $limit Number of rows that will be returned
+     * @param $team
      * @return mixed
      */
-    public function getTopRecipients(array $period, $limit);
+    public function getTopRecipients(array $period, $limit, $team);
 
     /**
      * Create new sending if valid

@@ -7,6 +7,7 @@ use App\Exceptions\LimitExceededException;
 use App\Exceptions\SenderLimitExceededException;
 use App\Exceptions\WalletNotSetException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -70,18 +71,19 @@ class SendingRepositoryEloquent extends BaseRepository implements SendingReposit
      *
      * @param array $period
      * @param $limit Number of rows that will be returned
+     * @param $team
      * @return mixed
      */
-    public function getTopRecipients(array $period, $limit)
+    public function getTopRecipients(array $period, $limit, $team)
     {
         return Sending::select(['recipient_id', 'messenger_name', DB::raw('SUM(amount) as total')])
             ->leftJoin('members', 'members.id', '=', 'sendings.recipient_id')
+            ->where('messenger_team_id', $team)
             ->whereBetween('sendings.created_at', $period)
             ->groupBy('recipient_id')
             ->orderBy(DB::raw('total'), 'DESC')
             ->limit($limit)
             ->get();
-
     }
 
     /**

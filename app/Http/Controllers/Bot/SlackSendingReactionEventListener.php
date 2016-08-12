@@ -56,7 +56,9 @@ class SlackSendingReactionEventListener extends Controller
      */
     public function fire(Request $request)
     {
-        return $this->addSending($request->input('event.user'), $request->input('event.item_user'));
+        return $this->addSending($request->input('event.user'), $request->input('event.item_user'), [
+            'messenger_team_id' => $request->input('team_id')
+        ]);
     }
 
     /**
@@ -66,10 +68,10 @@ class SlackSendingReactionEventListener extends Controller
      * @param $recipientId
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    protected function addSending($senderId, $recipientId)
+    protected function addSending($senderId, $recipientId, $update)
     {
-        $sender = $this->member->getFromMessenger('slack', $senderId);
-        $recipient = $this->member->getFromMessenger('slack', $recipientId);
+        $sender = $this->member->getFromMessenger('slack', $senderId, $update);
+        $recipient = $this->member->getFromMessenger('slack', $recipientId, $update);
 
         $this->updateNames([$recipient, $sender]);
 

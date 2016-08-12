@@ -64,6 +64,6 @@ class Sending extends Model
      */
     public function scopeToday($query)
     {
-        return $query->where('created_at', '>', Carbon::now()->startOfDay());
+        return $query->whereBetween('created_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()]);
     }
 }

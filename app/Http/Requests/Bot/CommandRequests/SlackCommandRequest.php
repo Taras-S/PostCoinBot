@@ -41,7 +41,8 @@ class SlackCommandRequest extends Request implements CommandRequestInterface
     public function member(MemberRepository $member)
     {
         return $member->getFromMessenger('slack', $this->input('user_id'), [
-                'messenger_name' => $this->input('user_name')
+                'messenger_name' => $this->input('user_name'),
+                'messenger_team_id' => $this->input('team_id')
         ]);
     }
 

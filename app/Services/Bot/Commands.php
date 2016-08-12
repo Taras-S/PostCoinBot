@@ -85,7 +85,7 @@ class Commands
         $from = Carbon::now()->startOfWeek();
         $to =   Carbon::now();
 
-        $top = $this->sendings->getTopRecipients([$from, $to], 10);
+        $top = $this->sendings->getTopRecipients([$from, $to], 10, $this->member->messenger_team_id);
 
         return compact('top');
     }
@@ -100,7 +100,7 @@ class Commands
         $from = Carbon::now()->startOfWeek()->subWeek();
         $to   = Carbon::now()->startOfWeek();
 
-        $top = $this->sendings->getTopRecipients([$from, $to], 10);
+        $top = $this->sendings->getTopRecipients([$from, $to], 10, $this->member->messenger_team_id);
 
         return compact('top');
     }

@@ -12,7 +12,7 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'messenger_id', 'messenger_name', 'messenger'
+        'messenger_id', 'messenger_name', 'messenger_team_id', 'messenger'
     ];
 
     /**
@@ -45,4 +45,16 @@ class Member extends Model
     {
         return $query->where('name', 'NULL');
     }
+
+    /**
+     * Sendings, that was created today
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeToday($query)
+    {
+        return $query->whereBetween('created_at', [Carbon::now()->startOfDay(), Carbon::now()->startOfDay()->addDay(1)]);
+    }
 }
+
