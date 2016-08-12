@@ -5,14 +5,14 @@ namespace App\Repositories;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Entities\User;
-use App\Validators\UserValidator;
+use App\Entities\Team;
+use App\Validators\TeamValidator;
 
 /**
- * Class UserRepositoryEloquent
+ * Class TeamRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class UserRepositoryEloquent extends BaseRepository implements UserRepository
+class TeamRepositoryEloquent extends BaseRepository implements TeamRepository
 {
     /**
      * Specify Model class name
@@ -21,7 +21,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function model()
     {
-        return User::class;
+        return Team::class;
     }
 
     /**
@@ -33,7 +33,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Create a new user or returns existing
+     * Create a new team or returns existing
      *
      * @param $messenger
      * @param $id
@@ -43,13 +43,13 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function getFromMessenger($messenger, $id, $accessToken, $botAccessToken)
     {
-        $user = User::firstOrCreate(['messenger' => $messenger, 'messenger_id' => $id]);
-        $user->update([
+        $team = Team::firstOrCreate(['messenger' => $messenger, 'messenger_id' => $id]);
+        $team->update([
             'access_token' => $accessToken,
             'bot_access_token' => $botAccessToken
         ]);
 
-        return $user;
+        return $team;
     }
 
     /**
@@ -60,7 +60,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     public function getTokenByMessengerId($messengerId)
     {
         try {
-            return User::where('messenger_id', $messengerId)->firstOrFail()->bot_access_token;
+            return Team::where('messenger_id', $messengerId)->firstOrFail()->bot_access_token;
         } catch (ModelNotFoundException $e) {
             return '';
         }

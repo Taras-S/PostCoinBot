@@ -3,13 +3,12 @@
 namespace App\Repositories;
 
 use Prettus\Repository\Contracts\RepositoryInterface;
-use Laravel\Socialite\Contracts\User as MessengerUser;
 
 /**
- * Interface UserRepository
+ * Interface TeamRepository
  * @package namespace App\Repositories;
  */
-interface UserRepository extends RepositoryInterface
+interface TeamRepository extends RepositoryInterface
 {
     public function getFromMessenger($messenger, $id, $accessToken, $botAccessToken);
     public function getTokenByMessengerId($messengerId);

@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Entities\User;
-use App\Repositories\UserRepository;
+use App\Entities\Team;
+use App\Repositories\TeamRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
@@ -23,10 +23,10 @@ class SlackClientServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      *
-     * @param UserRepository $team
+     * @param TeamRepository $team
      * @return void
      */
-    public function boot(UserRepository $team)
+    public function boot(TeamRepository $team)
     {
             $this->app->singleton(Commander::class, function ($app) use ($team) {
                 $interactor = new CurlInteractor;

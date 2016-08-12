@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class Team extends Authenticatable
 {
     /**
      * The attributes that are mass assignable.

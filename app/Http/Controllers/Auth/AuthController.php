@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Repositories\UserRepository;
+use App\Repositories\TeamRepository;
 use App\Services\SlackButton\SlackButton;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use App\Entities\User;
+use App\Entities\Team;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Response;
 
@@ -74,11 +74,11 @@ class AuthController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback(UserRepository $users)
+    public function handleProviderCallback(TeamRepository $teams)
     {
         $data = $this->provider->getAccessData();
-        $user = $users->getFromMessenger('slack', $data['team_id'], $data['access_token'], $data['bot']['bot_access_token']);
-        Auth::login($user, true);
+        $team = $teams->getFromMessenger('slack', $data['team_id'], $data['access_token'], $data['bot']['bot_access_token']);
+        Auth::login($team, true);
         return redirect()->route('dashboard');
     }
 
@@ -101,11 +101,11 @@ class AuthController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return User
+     * @return Team
      */
     protected function create(array $data)
     {
-        return User::create([
+        return Team::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
