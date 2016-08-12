@@ -51,7 +51,6 @@ class UpdateMemberNames implements ShouldQueue
      */
     public function handle()
     {
-        Log::info('handle');
         foreach($this->members as $member) {
             $member->messenger_name = $this->getNameByID($member->messenger_id);
             $member->save();

@@ -109,7 +109,6 @@ class SlackSendingReactionEventListener extends Controller
     protected function updateNames(array $members)
     {
         $job = (new UpdateMemberNames($this->api, ...$members))->delay(5);
-        Log::info('dispatch');
         $this->dispatch($job);
     }
 
