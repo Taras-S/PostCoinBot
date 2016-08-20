@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Redirect('https://github.com/Lisennk/PostCoinBot#moneybag-postcoin-bot-moneybag');
 });
 
 Route::get('auth/slack', 'Auth\AuthController@redirectToProvider')->name('auth.slack');
