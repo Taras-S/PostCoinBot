@@ -5,7 +5,15 @@ PostCoinBot it's a bot, that allow to send "free" [postcoins](http://postcoin.si
 
 PostCoinBot is built on top of Laravel 5.2 and Blade as engine to generate Bot answers. It's using Slack Web and Events API.
 
-*Available commands:*
+## How to install
+
+Visit [postcoin.io](http://postcoin.io) and press "Add to Slack" button
+
+## How to send free postcoin
+
+Add :postcoin: reaction to any message, and author will recieve 1 free postcoin. 
+
+## Available commands
 
 :white_check_mark: `/postcoin setwallet` -- sets your PostCoin wallet
 
@@ -17,5 +25,6 @@ PostCoinBot is built on top of Laravel 5.2 and Blade as engine to generate Bot a
 
 :white_check_mark: `/postcoin help` -- get help
 
+## Thanks 
 
-**PostCoinBot now is under development...**
+**Special thanks to [@LoginovIlya](https://github.com/LoginovIlya) for help with server**.
